@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IK FDE Brochure &mdash; US vs. India, Page by Page</title>
+<style>
+  :root {
+    --navy: #1F3B73;
+    --blue: #2C5FA8;
+    --light: #EAF1FB;
+    --grey: #6B7280;
+    --paper: #FBFAF8;
+    --high: #B3261E;
+    --high-bg: #FCEEED;
+    --medium: #9A6700;
+    --medium-bg: #FDF3DE;
+    --low: #1E7B34;
+    --low-bg: #EAF6EC;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    background: var(--paper);
+    color: #1a1a1a;
+    line-height: 1.55;
+  }
+  header.top {
+    position: sticky; top: 0; z-index: 50;
+    background: var(--navy);
+    color: white;
+    padding: 18px 28px 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  }
+  header.top h1 { margin: 0 0 4px; font-size: 20px; letter-spacing: 0.2px; }
+  header.top .sub { font-size: 13px; color: #B9C7E8; margin-bottom: 12px; }
+  .legend { display:flex; gap: 14px; font-size: 12px; color: #E4EAF6; margin-bottom: 10px; flex-wrap: wrap; }
+  .legend span { display:flex; align-items:center; gap: 6px; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+  .dot-high { background: #E5675F; } .dot-medium { background: #E3B341; } .dot-low { background: #5FBE79; }
+  .nav-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    display: inline-block; padding: 3px 9px; border-radius: 12px; font-size: 12px;
+    text-decoration: none; color: white; border: 1px solid rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.08); transition: background 0.15s;
+  }
+  .chip:hover { background: rgba(255,255,255,0.22); }
+  .chip-high { border-color: #E5675F; } .chip-medium { border-color: #E3B341; } .chip-low { border-color: #5FBE79; }
+
+  main { max-width: 1180px; margin: 0 auto; padding: 24px 24px 80px; }
+
+  .page { margin-bottom: 34px; scroll-margin-top: 168px; }
+  .page-head {
+    display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px;
+    border-bottom: 3px solid var(--navy); padding-bottom: 8px;
+  }
+  .page-num { font-size: 12px; font-weight: 700; color: var(--grey); text-transform: uppercase; letter-spacing: 0.06em; }
+  .page-head h2 { font-size: 21px; margin: 0; color: var(--navy); flex: 1; }
+  .badge { font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px; white-space: nowrap; }
+  .badge-high { color: var(--high); background: var(--high-bg); }
+  .badge-medium { color: var(--medium); background: var(--medium-bg); }
+  .badge-low { color: var(--low); background: var(--low-bg); }
+
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+  @media (max-width: 860px) { .cols { grid-template-columns: 1fr; } }
+
+  .col { border-radius: 10px; padding: 16px 18px; }
+  .col-us { background: #F1F1EF; border: 1px solid #E2E1DC; }
+  .col-india { background: white; border: 1px solid var(--light); border-left: 4px solid var(--blue); box-shadow: 0 1px 4px rgba(31,59,115,0.06); }
+  .col-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 10px; }
+  .col-us .col-label { color: #8A8A82; }
+  .col-india .col-label { color: var(--blue); }
+
+  .col-body p { margin: 0 0 10px; font-size: 14.5px; }
+  .col-body h4 { margin: 14px 0 4px; font-size: 14px; color: var(--navy); }
+  .col-body h4:first-child { margin-top: 0; }
+  .col-body ul { margin: 0 0 10px; padding-left: 20px; font-size: 14.5px; }
+  .col-body li { margin-bottom: 5px; }
+  .col-body .lead { font-weight: 700; }
+  .col-body .note { font-style: italic; color: var(--grey); font-size: 13.5px; }
+  .col-body table { width: 100%; border-collapse: collapse; margin-bottom: 10px; font-size: 13.5px; }
+  .col-body th { background: var(--navy); color: white; text-align: left; padding: 6px 8px; font-size: 12px; }
+  .col-india .col-body th { background: var(--blue); }
+  .col-body td { padding: 6px 8px; border-bottom: 1px solid #e4e4e0; vertical-align: top; }
+  .stat-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .stat { flex: 1; min-width: 130px; background: var(--light); border-radius: 8px; padding: 10px 12px; }
+  .col-us .stat { background: #E7E6E1; }
+  .stat-big { font-weight: 800; color: var(--navy); font-size: 17px; }
+  .stat-label { font-size: 11.5px; color: var(--grey); margin-top: 2px; }
+  .flag {
+    margin-top: 12px; font-size: 12.5px; color: #0E7C86; background: #E6F5F6;
+    border-left: 3px solid #0E7C86; padding: 8px 10px; border-radius: 4px;
+  }
+
+  footer { text-align: center; padding: 30px; color: var(--grey); font-size: 12.5px; }
+</style>
+</head>
+<body>
+<header class="top">
+  <h1>IK Forward Deployed AI Engineering Brochure &mdash; US Original vs. India Final</h1>
+  <div class="sub">Page-by-page comparison &middot; 22 pages &middot; click a page number to jump</div>
+  <div class="legend">
+    <span><span class="dot dot-high"></span> Heavy rewrite (6 pages)</span>
+    <span><span class="dot dot-medium"></span> Moderate edit (3 pages)</span>
+    <span><span class="dot dot-low"></span> Minor / no change (9 pages)</span>
+  </div>
+  <div class="nav-chips"><a href="#page-1" class="chip chip-high">1</a><a href="#page-2" class="chip chip-low">2</a><a href="#page-3" class="chip chip-high">3</a><a href="#page-4" class="chip chip-medium">4</a><a href="#page-5" class="chip chip-low">5</a><a href="#page-6" class="chip chip-high">6</a><a href="#page-7" class="chip chip-medium">7</a><a href="#page-8" class="chip chip-low">8</a><a href="#page-9–13" class="chip chip-high">9–13</a><a href="#page-14" class="chip chip-low">14</a><a href="#page-15" class="chip chip-high">15</a><a href="#page-16" class="chip chip-low">16</a><a href="#page-17" class="chip chip-high">17</a><a href="#page-18" class="chip chip-medium">18</a><a href="#page-19" class="chip chip-low">19</a><a href="#page-20" class="chip chip-low">20</a><a href="#page-21" class="chip chip-low">21</a><a href="#page-22" class="chip chip-low">22</a></div>
+</header>
+<main>
+
+  <section class="page" id="page-1">
+    <div class="page-head">
+      <div class="page-num">Page 1</div>
+      <h2>Cover</h2>
+      <span class="badge badge-high">Heavy rewrite</span>
+    </div>
+    <div class="cols">
+      <div class="col col-us">
+        <div class="col-label">US Brochure &middot; Original</div>
+        <div class="col-body"><p class="lead">Kickstart a High-Paying FDE Career at Top AI Companies</p><p>Build, ship, and operate real AI systems inside customer environments, not just demos.</p></div>
+      </div>
+      <div class="col col-india">
+        <div class="col-label">India Brochure &middot; Final</div>
+        <div class="col-body"><p class="lead">Kickstart a High-Paying Forward Deployed AI Engineering Career at Top Companies</p><p>Build, ship, and operate real AI systems inside customer environments &mdash; not just demos.</p></div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="page" id="page-2">
+    <div class="page-head">
+      <div class="page-num">Page 2</div>
+      <h2>Move Beyond Demos. Ship Production Systems.</h2>
+      <span class="badge badge-low">Minor / no change</span>
+    </div>
+    <div class="cols">
+      <div class="col col-us">
+        <div class="col-label">US Brochure &middot; Original</div>
+        <div class="col-body"><p>Agentic AI has moved past the prototype. Companies don't need another chatbot demo. They need engineers who can scope a problem with a customer, build a production-grade agentic system, deploy it inside the customer's environment, and own it end to end.</p><p>The <b>Forward Deployed Engineer (FDE)</b> sits at the intersection of software engineering, customer-facing delivery, and AI deployment. The FDE owns production code that runs inside the customer's environment, covering orchestration, safety, evaluation, cost control, and operations.</p><p>This program is not about “using AI.” It trains the engineering judgment senior AI roles are hired for: deciding when to use agents versus deterministic systems, selecting the right design patterns, and justifying architectural trade-offs.</p><p>It then extends that depth with the distinctly FDE craft: customer discovery, problem framing, scoping & commercials, enterprise wiring & governance, operations & customer handover, and closes with FDE-specific interview preparation.</p></div>
+      </div>
+      <div class="col col-india">
+        <div class="col-label">India Brochure &middot; Final</div>
+        <div class="col-body"><p>Agentic AI has moved past the prototype. Companies don't need another chatbot demo. They need engineers who can scope a problem with a customer, build a production-grade agentic system, deploy it inside the customer's environment, and own it end to end.</p><p>The <b>Forward Deployed AI Engineer (FDE)</b> sits at the intersection of software engineering, customer-facing delivery, and AI deployment. The FDE owns production code that runs inside the customer's environment &mdash; covering orchestration, safety, evaluation, cost control, and operations.</p><p>This program is not about “using AI.” It trains the engineering judgment senior AI roles are hired for: deciding when to use agents versus deterministic systems, selecting the right design patterns, and justifying architectural trade-offs.</p><p>It then extends that depth with the distinctly FDE craft: customer discovery, problem framing, scoping & commercials, enterprise wiring & governance, and operations & customer handover &mdash; closing with FDE-specific interview preparation.</p></div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="page" id="page-3">
+    <div class="page-head">
+      <div class="page-num">Page 3</div>
+      <h2>Market Opportunity</h2>
+      <span class="badge badge-high">Heavy rewrite</span>
+    </div>
+    <div class="cols">
+      <div class="col col-us">
+        <div class="col-label">US Brochure &middot; Original</div>
+        <div class="col-body"><p><b>A Strategic Role Exploding With AI</b></p><p>FDE is the fastest-growing, highest-paid software-engineering role in 2026 &mdash; and the talent does not yet exist.</p><div class="stat-row"><div class="stat"><div class="stat-big">1,000%</div><div class="stat-label">YoY growth in FDE job postings</div></div><div class="stat"><div class="stat-big">$385K</div><div class="stat-label">Highest FDE base salary across all JDs (OpenAI, before equity)</div></div><div class="stat"><div class="stat-big">$6.25B</div><div class="stat-label">Committed by OpenAI, Anthropic & Google to scale forward-deployed AI</div></div></div><h4>Explosive Demand</h4><p>US FDE job postings jumped ~1,000% YoY &mdash; from 87 a month in Q1 2025 to 1,078 a month in Q1 2026 (LinkedIn).</p><h4>Unmatched Pay</h4><p>Posted base pay across Google, OpenAI, and Anthropic ranges from $123K to $385K. With equity, top-tier FDE compensation can exceed $600K+, with OpenAI NYC TC bands reported at $675K&ndash;$870K on Levels.fyi.</p><h4>Hard Dollars Behind the Role</h4><p>Google Cloud ($750M partner fund), Anthropic ($1.5B JV), OpenAI ($4B Deployment Company), and Salesforce (1,000 FDEs) are all investing.</p><h4>A Skills Gap, Not a Talent Pool</h4><p>Gartner forecasts 70% of enterprises will abandon agentic AI engagements by 2028 over vendor cost and lack of internal skills.</p><h4>First-Mover Advantage</h4><p>Across every major learning platform, not a single cohort-based live program teaches the FDE role. IK steps into open territory as the first mover and category definer.</p></div>
+      </div>
+      <div class="col col-india">
+        <div class="col-label">India Brochure &middot; Final</div>
+        <div class="col-body"><p><b>A Fast-Emerging Category, Now Arriving in India</b></p><p>FDE is one of the fastest-growing specializations in AI engineering globally &mdash; and India is early in the curve, not absent from it.</p><div class="stat-row"><div class="stat"><div class="stat-big">12,631% YoY</div><div class="stat-label">Growth in India search interest for FDE roles (Keyword Planner, Jun'25–May'26)</div></div><div class="stat"><div class="stat-big">60+</div><div class="stat-label">Verified companies hiring FDE roles in India (May–Jul 2026)</div></div><div class="stat"><div class="stat-big">Deepest, Not First</div><div class="stat-label">IK is not the first FDE program in India, but the most complete, placement-backed one</div></div></div><h4>Emerging Demand</h4><p>India FDE-related search interest is growing off a small base but at a much faster rate than the US. The market is early, not large &mdash; and that's exactly why getting in now matters.</p><h4>Real Employer Demand</h4><p>60+ companies &mdash; GCCs, MNCs, consulting firms, and AI startups &mdash; are actively hiring for FDE and FDE-adjacent roles, concentrated in Bengaluru, followed by Hyderabad, Gurugram, Mumbai, Pune, Chennai, and Noida.</p><h4>A Skills Gap, Not a Saturated Market</h4><p>Gartner forecasts 70% of enterprises will abandon agentic AI engagements by 2028 over vendor cost and lack of internal skills &mdash; the exact gap FDEs are hired to close.</p><h4>Built for Depth, Not a First-Mover Claim</h4><p>IK isn't the first company teaching FDE skills in India. No other India program combines AI engineering depth, enterprise deployment, and dedicated placement support in one end-to-end track.</p><div class="flag">⚑ All 3 headline stats replaced &mdash; the US figures are false for India, and “first mover” directly contradicts Scaler + 6 other existing India FDE programs.</div></div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="page" id="page-4">
+    <div class="page-head">
+      <div class="page-num">Page 4</div>
+      <h2>Who This Program Is For</h2>
+      <span class="badge badge-medium">Moderate edit</span>
+    </div>
+    <div class="cols">
+      <div class="col col-us">
+        <div class="col-label">US Brochure &middot; Original</div>
+        <div class="col-body"><p><b>Prerequisites</b></p><ul><li>Solid understanding of software-engineering principles and practices.</li><li>Python proficiency. SQL fluency is a strong advantage.</li><li>Comfort with at least one cloud provider (AWS, GCP, or Azure).</li><li>Prior AI / ML background is NOT required.</li></ul><p><b>Who Should Enrol</b></p><ul><li>Backend, Fullstack & Platform Engineers</li><li>Senior Software Engineers</li><li>Machine Learning Engineers</li><li>Data Engineers</li><li>Customer Engineers & Solutions Architects</li><li>Solutions Engineers at AI Startups</li><li>Data Scientists</li><li>DevOps, Platform & SRE Engineers</li><li>TPMs, EMs & Tech Leads Who Still Code</li></ul></div>
+      </div>
+      <div class="col col-india">
+        <div class="col-label">India Brochure &middot; Final</div>
+        <div class="col-body"><p><b>Prerequisites</b></p><ul><li>Solid understanding of software-engineering principles and practices.</li><li>Python proficiency. SQL fluency is a strong advantage.</li><li>Comfort with at least one cloud provider (AWS, GCP, or Azure).</li><li>Prior AI / ML background is NOT required.</li></ul><p><b>Who Should Enrol</b></p><ul><li>Backend, Full Stack, Platform, DevOps & Software Engineers</li><li>Senior Software Engineers</li><li>Machine Learning Engineers</li><li>Data Engineers</li><li>Customer Engineers, Solutions Architects & <b>AI Solution Consultants</b></li><li>Solutions Engineers at AI Startups</li><li>Data Scientists</li><li>DevOps, Platform & SRE Engineers</li><li>TPMs, EMs, Tech Leads & <b>Senior Engineers</b> Who Still Code</li></ul><div class="flag">⚑ Role list expanded per the approved India LP swap: adds AI Solution Consultants, folds DevOps into the first bullet, adds Senior Engineers to the last.</div></div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="page" id="page-5">
+    <div class="page-head">
+      <div class="page-num">Page 5</div>
+      <h2>Program at a Glance</h2>
+      <span class="badge badge-low">Minor / no change</span>
+    </div>
+    <div class="cols">
+      <div class="col col-us">
+        <div class="col-label">US Brochure &middot; Original</div>
+        <div class="col-body"><table><thead><tr><th>Phase</th><th>Weeks</th></tr></thead><tbody><tr><td>AI Engineering Spine</td><td>1–11</td></tr><tr><td>AI-Assisted</td><td>12</td></tr><tr><td>FDE Spine</td><td>13–17</td></tr><tr><td>FDE Interview Prep</td><td>18–23</td></tr></tbody></table><p>23 weeks &middot; cohort-based &middot; fully live &middot; a guided live project almost every week</p><ul><li>8 live guided projects, built with the instructor</li><li>3 AI Stacks (OpenAI, Google, Anthropic)</li><li>6 weeks dedicated FDE interview preparation</li><li>2 industry-grade capstones (AI Engineering + FDE)</li><li>Every week: a real-world guided project, progressively building</li><li>Recorded: all live sessions, to catch up anytime</li></ul><p class="note">On average, participants dedicate 4–6 hours/week for live sessions and 6–8 hours/week for assignments, projects and self-paced practice.</p></div>
+      </div>
+      <div class="col col-india">
+        <div class="col-label">India Brochure &middot; Final</div>
+        <div class="col-body"><table><thead><tr><th>Phase</th><th>Weeks</th></tr></thead><tbody><tr><td>AI Engineering Spine</td><td>1–11</td></tr><tr><td>AI-Assisted</td><td>12</td></tr><tr><td>FDE Spine</td><td>13–17</td></tr><tr><td>FDE Interview Prep</td><td>18–23</td></tr></tbody></table><p>23 weeks &middot; cohort-based &middot; fully live &middot; a guided live project almost every week</p><ul><li>8 live guided projects, built with the instructor</li><li>3 AI Stacks (OpenAI, Google, Anthropic)</li><li>6 weeks dedicated FDE interview preparation</li><li>2 industry-grade capstones (AI Engineering + FDE)</li><li>Every week: a real-world guided project, progressively building</li><li>Recorded: all live sessions, to catch up anytime</li></ul><p class="note">On average, participants dedicate 4–6 hours/week for live sessions and 6–8 hours/week for assignments, projects and self-paced practice.</p><div class="flag">⚑ No India-specific issue &mdash; carried over unchanged.</div></div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="page" id="page-6">
+    <div class="page-head">
+      <div class="page-num">Page 6</div>
+      <h2>What Makes This Program Unique</h2>
+      <span class="badge badge-high">Heavy rewrite</span>
+    </div>
+    <div class="cols">
+      <div class="col col-us">
+        <div class="col-label">US Brochure &middot; Original</div>
+        <div class="col-body"><h4>1. First-of-its-kind FDE Program</h4><p>The first cohort-grade Forward Deployed Engineering program built for the US market.</p><h4>2. From Tool Demos to Production Systems</h4><p>Moves beyond isolated LLM, RAG and framework demos to end-to-end, production-grade agentic systems.</p><h4>3. From ‘Using AI’ to Engineering Judgment</h4><p>Trains engineers to decide when to use agents vs deterministic systems, select the right design patterns, and justify architectural trade-offs.</p><h4>4. From AI Engineering to FDE Craft</h4><p>Adds the distinctly FDE skills: customer discovery, problem framing, scoping & commercials, enterprise wiring & governance, operations & customer handover.</p><h4>5. FDE Interview Preparation Built In</h4><p>Technical Agentic-AI interview prep plus customer-centric prep (decomposition rounds, AI-assisted pair coding, STAR+ behavioural).</p><h4>6. Multi-Stack Capstone Coverage</h4><p>Primary stack <b>OpenAI Agents SDK + Azure AI Foundry</b>; additionally delivered on Google ADK + Vertex AI and Claude Agent SDK + Amazon Bedrock AgentCore.</p><p class="lead">Ready to become FDE-ready? Join the first cohort-grade program built for the FDE market. Talk to a Program Advisor →</p></div>
+      </div>
+      <div class="col col-india">
+        <div class="col-label">India Brochure &middot; Final</div>
+        <div class="col-body"><h4>1. Comprehensive, Placement-Backed FDE Program</h4><p>An end-to-end curriculum covering AI engineering, enterprise deployment, and dedicated FDE interview preparation &mdash; built for MAANG, GCCs, product companies, and top AI startups.</p><h4>2. From Tool Demos to Production Systems</h4><p>Moves beyond isolated LLM, RAG and framework demos to end-to-end, production-grade agentic systems.</p><h4>3. From ‘Using AI’ to Engineering Judgment</h4><p>Trains engineers to decide when to use agents vs deterministic systems, select the right design patterns, and justify architectural trade-offs.</p><h4>4. From AI Engineering to FDE Craft</h4><p>Adds the distinctly FDE skills: customer discovery, problem framing, scoping & commercials, enterprise wiring & governance, operations & customer handover.</p><h4>5. FDE Interview Preparation Built In</h4><p>Technical Agentic-AI interview prep plus customer-centric prep (decomposition rounds, AI-assisted pair coding, STAR+ behavioural).</p><h4>6. Multi-Stack Capstone Coverage</h4><p>Primary stack <b>OpenAI Agents SDK + AWS Bedrock AgentCore</b>; additionally delivered on Google ADK + Vertex AI Agent Builder and Claude Agent SDK + Azure AI Foundry.</p><p class="lead">Ready to become FDE-ready? Join a comprehensive, placement-backed Forward Deployed AI Engineering program. Register for Free Career Session →</p><div class="flag">⚑ Differentiator #1 reframed (removes false first-mover/US-market claim); #6 stack order swapped, Azure moved to alternate.</div></div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="page" id="page-7">
+    <div class="page-head">
+      <div class="page-num">Page 7</div>
+      <h2>Tech Stack Covered Across the Program</h2>
+      <span class="badge badge-medium">Moderate edit</span>
+    </div>
+    <div class="cols">
+      <div class="col col-us">
+        <div class="col-label">US Brochure &middot; Original</div>
+        <div class="col-body"><table><thead><tr><th>Category</th><th>Tools</th></tr></thead><tbody><tr><td>Languages & Dev Tools</td><td>Python · VSCode · Git · Google Colab · Claude Code</td></tr><tr><td>Agent Frameworks</td><td>LangChain · LangGraph · LlamaIndex · Google ADK</td></tr><tr><td>Evaluation & Safety</td><td>LangSmith · DeepEval · Guardrails AI · Microsoft Presidio · tiktoken</td></tr><tr><td><b>FDE Tooling</b></td><td><b>OpenAI Agents SDK · Azure AI Foundry</b></td></tr><tr><td>Deployment</td><td>Docker · AWS · Kubernetes · CI/CD concepts</td></tr></tbody></table></div>
+      </div>
+      <div class="col col-india">
+        <div class="col-label">India Brochure &middot; Final</div>
+        <div class="col-body"><table><thead><tr><th>Category</th><th>Tools</th></tr></thead><tbody><tr><td>Languages & Dev Tools</td><td>Python · VSCode · Git · Google Colab · Claude Code</td></tr><tr><td>Agent Frameworks</td><td>LangChain · LangGraph · LlamaIndex · Google ADK</td></tr><tr><td>Evaluation & Safety</td><td>LangSmith · DeepEval · Guardrails AI · Microsoft Presidio · tiktoken</td></tr><tr><td><b>FDE Tooling</b></td><td><b>OpenAI Agents SDK · AWS Bedrock AgentCore</b></td></tr><tr><td>Deployment</td><td>Docker · AWS · Kubernetes · CI/CD concepts</td></tr></tbody></table><div class="flag">⚑ FDE Tooling row swapped to match the new AWS-primary stack order (full table otherwise unchanged).</div></div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="page" id="page-8">
+    <div class="page-head">
+      <div class="page-num">Page 8</div>
+      <h2>Program Roadmap</h2>
+      <span class="badge badge-low">Minor / no change</span>
+    </div>
+    <div class="cols">
+      <div class="col col-us">
+        <div class="col-label">US Brochure &middot; Original</div>
+        <div class="col-body"><p>Four connected phases over 23 weeks. A guided live project ships almost every week, and the FDE capstone runs continuously across Weeks 13–17.</p><p class="note">W1–11 AI Engineering Spine &middot; W12 AI-Assisted &middot; W13–17 FDE Spine &middot; W18–23 FDE Interview Prep &middot; DSA Refresher (self-paced, runs alongside)</p><h4>FDE-Ready</h4><p>Portfolio capstone shipped &middot; Interview loops rehearsed &middot; Ready to land a top FDE role.</p></div>
+      </div>
+      <div class="col col-india">
+        <div class="col-label">India Brochure &middot; Final</div>
+        <div class="col-body"><p>Four connected phases over 23 weeks. A guided live project ships almost every week, and the FDE capstone runs continuously across Weeks 13–17.</p><p class="note">W1–11 AI Engineering Spine &middot; W12 AI-Assisted &middot; W13–17 FDE Spine &middot; W18–23 FDE Interview Prep &middot; DSA Refresher (self-paced, runs alongside)</p><h4>FDE-Ready</h4><p>Portfolio capstone shipped &middot; Interview loops rehearsed &middot; Ready to land a top FDE role.</p><div class="flag">⚑ No India-specific issue &mdash; carried over unchanged.</div></div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="page" id="page-9–13">
+    <div class="page-head">
+      <div class="page-num">Page 9–13</div>
+      <h2>Curriculum · Week by Week (FDE Spine, Weeks 13–17)</h2>
+      <span class="badge badge-high">Heavy rewrite</span>
+    </div>
+    <div class="cols">
+      <div class="col col-us">
+        <div class="col-label">US Brochure &middot; Original</div>
+        <div class="col-body"><p><i>Weeks 1–12 and 18–23 are universal &mdash; no India-specific issue. Showing the FDE Spine (13–17), where the stack lives.</i></p><p class="lead">Primary stack: OpenAI Agents SDK + Azure AI Foundry. Alternate: Google ADK + Vertex AI; Claude Agent SDK + Amazon Bedrock AgentCore.</p><h4>Week 15: Building Production Agents (OpenAI SDK + Azure Foundry)</h4><ul><li>Deploying on <b>Azure AI Foundry</b> (Agent Service vs Hosted Agents vs Container Apps); production hardening.</li><li>Production RAG at scale on <b>Azure AI Search</b>; multi-tenant RAG; cost-shape disciplines.</li><li>Tools: OpenAI Agents SDK, Azure AI Foundry, Azure AI Search, Application Insights, Azure Key Vault.</li></ul><h4>Week 16: APIs, MCP Servers & RBAC</h4><ul><li>Designing APIs as agent tools (FastAPI / <b>Azure Functions</b>).</li><li>API auth patterns (API keys, OAuth 2.0, <b>Entra</b> service principals).</li><li>Tools: FastAPI / Azure Functions, FastMCP, <b>Microsoft Entra</b>, <b>Azure Container Apps</b>.</li></ul><h4>Week 17: Evals, Observability & Handover</h4><ul><li>Compliance literacy (SOC 2, HIPAA, FedRAMP, ISO 27001, GDPR).</li><li>Observability on <b>Azure</b> (App Insights, Foundry, Log Analytics).</li></ul></div>
+      </div>
+      <div class="col col-india">
+        <div class="col-label">India Brochure &middot; Final</div>
+        <div class="col-body"><p><i>Weeks 1–12 and 18–23 carried over unchanged &mdash; universal content. Showing the FDE Spine (13–17), where the stack changes.</i></p><p class="lead">Primary stack: OpenAI Agents SDK + AWS Bedrock AgentCore. Alternates: Google ADK + Vertex AI; Claude Agent SDK + Azure AI Foundry.</p><h4>Week 15: Building Production Agents (OpenAI SDK + AWS Bedrock AgentCore)</h4><ul><li>Deploying on <b>AWS Bedrock AgentCore</b> (Bedrock Agents vs Lambda-hosted agents vs ECS/Fargate containers); production hardening.</li><li>Production RAG at scale on <b>Amazon OpenSearch Service</b>; multi-tenant RAG; cost-shape disciplines.</li><li>Tools: OpenAI Agents SDK, AWS Bedrock AgentCore, Amazon OpenSearch Service, Amazon CloudWatch, AWS Secrets Manager.</li></ul><h4>Week 16: APIs, MCP Servers & RBAC</h4><ul><li>Designing APIs as agent tools (FastAPI / <b>AWS Lambda</b>).</li><li>API auth patterns (API keys, OAuth 2.0, <b>AWS IAM</b>, Amazon Cognito).</li><li>Tools: FastAPI / AWS Lambda, FastMCP, <b>AWS IAM / Cognito</b>, <b>AWS Fargate</b>.</li></ul><h4>Week 17: Evals, Observability & Handover</h4><ul><li>Compliance literacy (SOC 2, HIPAA, FedRAMP, ISO 27001, GDPR, <b>India's DPDP Act</b>).</li><li>Observability on <b>AWS</b> (CloudWatch, Bedrock Agent traces, CloudWatch Logs Insights).</li></ul><div class="flag">⚑ Week 15 body content is a best-effort AWS translation of the Azure-specific original &mdash; recommend a curriculum-team pass to confirm exact AWS service names before this ships.</div></div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="page" id="page-14">
+    <div class="page-head">
+      <div class="page-num">Page 14</div>
+      <h2>Live Guided Projects</h2>
+      <span class="badge badge-low">Minor / no change</span>
+    </div>
+    <div class="cols">
+      <div class="col col-us">
+        <div class="col-label">US Brochure &middot; Original</div>
+        <div class="col-body"><p>P1&ndash;P8: CRM Lead Qualifier Agent, SupportDesk-RAG, Multi-Agent Travel Planner, <b>AxiomCart &mdash; Voice-Enabled Shopping Assistant</b> <i>(em dash)</i>, Real-Estate Negotiation Simulator, Vertical Insights Agent, Production-Ready Fintech Support Agent, Domain-Specific Fine-Tuned Agent.</p></div>
+      </div>
+      <div class="col col-india">
+        <div class="col-label">India Brochure &middot; Final</div>
+        <div class="col-body"><p>P1&ndash;P8: CRM Lead Qualifier Agent, SupportDesk-RAG, Multi-Agent Travel Planner, <b>AxiomCart - Voice-Enabled Shopping Assistant</b> <i>(hyphen)</i>, Real-Estate Negotiation Simulator, Vertical Insights Agent, Production-Ready Fintech Support Agent, Domain-Specific Fine-Tuned Agent.</p><div class="flag">⚑ Only change: em dashes → hyphens in project titles, per the explicit India style rule. Descriptions unchanged.</div></div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="page" id="page-15">
+    <div class="page-head">
+      <div class="page-num">Page 15</div>
+      <h2>Capstone Projects</h2>
+      <span class="badge badge-high">Heavy rewrite</span>
+    </div>
+    <div class="cols">
+      <div class="col col-us">
+        <div class="col-label">US Brochure &middot; Original</div>
+        <div class="col-body"><h4>FDE PriorAuth AI (Healthcare)</h4><p>Tools & concepts: OpenAI Agents SDK + <b>Azure AI Foundry</b>, FastMCP, SSO, audit logging.</p><h4>FDE ClaimSense AI (Insurance)</h4><p>Tools & concepts: Multi-agent + MCP + RAG; customer discovery, SoW, solution architecture.</p><h4>Agentic Finnie / ContentAlchemy / Call Center Intelligence / SmartDesk AI</h4><p>Four additional capstones, unchanged.</p><h4>BYOP</h4><p>Bring Your Own Project.</p></div>
+      </div>
+      <div class="col col-india">
+        <div class="col-label">India Brochure &middot; Final</div>
+        <div class="col-body"><h4>FDE PriorAuth AI (Healthcare)</h4><p>Tools & concepts: OpenAI Agents SDK + <b>AWS Bedrock AgentCore</b>, FastMCP, SSO, audit logging.</p><h4>FDE ClaimSense AI (Insurance)</h4><p>Tools & concepts: OpenAI Agents SDK + <b>AWS Bedrock AgentCore</b>, FastMCP, audit logging, multi-agent systems, RAG.</p><h4><b>FDE KYC Shield AI (BFSI — India) &mdash; NEW</b></h4><p>An FDE engagement for an Indian NBFC's KYC/AML workflow &mdash; DPDP-compliant PII handling, watchlist screening, human-in-the-loop review for high-risk cases.</p><h4>Agentic Finnie / ContentAlchemy / Call Center Intelligence / SmartDesk AI</h4><p>Four additional capstones, unchanged.</p><h4>BYOP</h4><p>Bring Your Own Project.</p><div class="flag">⚑ Stack swapped on both named capstones. One new India-context capstone added to fill the BFSI/DPDP gap flagged in market research &mdash; drafted, not yet curriculum-approved.</div></div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="page" id="page-16">
+    <div class="page-head">
+      <div class="page-num">Page 16</div>
+      <h2>Career & Bonus Tracks</h2>
+      <span class="badge badge-low">Minor / no change</span>
+    </div>
+    <div class="cols">
+      <div class="col col-us">
+        <div class="col-label">US Brochure &middot; Original</div>
+        <div class="col-body"><ul><li>DSA Refresher (self-paced)</li><li>Resume & LinkedIn Masterclass (live)</li><li>Behavioural Interview Strategies (live)</li><li>Offer Negotiation Workshop (live)</li><li>Foundations & Tooling (self-paced)</li></ul><p>End-to-End Career Support: personalised mock interviews, resume optimisation, career coaching, salary negotiation guidance, performance-based referrals, alumni community access.</p></div>
+      </div>
+      <div class="col col-india">
+        <div class="col-label">India Brochure &middot; Final</div>
+        <div class="col-body"><ul><li>DSA Refresher (self-paced)</li><li>Resume & LinkedIn Masterclass (live)</li><li>Behavioural Interview Strategies (live)</li><li>Offer Negotiation Workshop (live)</li><li>Foundations & Tooling (self-paced)</li></ul><p>End-to-End Career Support: personalised mock interviews, resume optimisation, career coaching, salary negotiation guidance, performance-based referrals, alumni community access.</p><div class="flag">⚑ No India-specific issue &mdash; carried over unchanged.</div></div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="page" id="page-17">
+    <div class="page-head">
+      <div class="page-num">Page 17</div>
+      <h2>Your Instructors and Mentors</h2>
+      <span class="badge badge-high">Heavy rewrite</span>
+    </div>
+    <div class="cols">
+      <div class="col col-us">
+        <div class="col-label">US Brochure &middot; Original</div>
+        <div class="col-body"><p>Interview Kickstart draws on a pool of <b>700+ FAANG+ instructors and mentors</b>.</p><ul><li>Faiza Ghazanfar &mdash; Principal AI Product Leader, FDE, Microsoft</li><li>Sandhya Kapoor &mdash; SVP, Central Platform, AI Infrastructure, Ex-Meta</li><li>Nahid Farady &mdash; Lead Eng in AI Security, Microsoft</li><li>Rishabh Misra &mdash; Lead ML Engineer & Researcher, Ex-Google</li><li>Ram Vegiraju &mdash; ML Architect @ AWS</li><li>Samwel Emmanuel &mdash; Data & AI Solutions Architect @ Databricks</li></ul></div>
+      </div>
+      <div class="col col-india">
+        <div class="col-label">India Brochure &middot; Final</div>
+        <div class="col-body"><p>Interview Kickstart draws on a pool of <b>700+ MAANG+ instructors and mentors</b>.</p><ul><li>Ram Vegiraju &mdash; ML Architect @ AWS</li><li>Sandhya Kapoor &mdash; SVP, Central Platform, AI Infrastructure, Ex-Meta</li><li><b>Prateek Singhal</b> &mdash; Software Engineer II, Scaling AI Infrastructure</li><li><b>Anshaj Khare</b> &mdash; Software Engineer II, Agentic AI</li><li><b>Jorge Luna</b> &mdash; Principal Forward Deployed Engineering Lead</li><li>Samwel Emmanuel &mdash; Data & AI Solutions Architect @ Databricks</li></ul><div class="flag">⚑ FAANG+ → MAANG+. Roster reconciled with the confirmed India LP hero-section instructors (Prateek Singhal, Anshaj Khare, Jorge Luna swapped in for Faiza Ghazanfar, Nahid Farady, Rishabh Misra) so LP and brochure show the same team.</div></div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="page" id="page-18">
+    <div class="page-head">
+      <div class="page-num">Page 18</div>
+      <h2>About Interview Kickstart</h2>
+      <span class="badge badge-medium">Moderate edit</span>
+    </div>
+    <div class="cols">
+      <div class="col col-us">
+        <div class="col-label">US Brochure &middot; Original</div>
+        <div class="col-body"><p>Founded in 2014 in Santa Clara by Soham Mehta and Ryan Valles &mdash; 700+ instructors from <b>FAANG+</b>.</p><div class="stat-row"><div class="stat"><div class="stat-big">25,000+</div><div class="stat-label">Tech professionals trained</div></div><div class="stat"><div class="stat-big">$1.2M</div><div class="stat-label">Highest salary received by an alum</div></div><div class="stat"><div class="stat-big">66.5%</div><div class="stat-label">Average salary hike for learners</div></div><div class="stat"><div class="stat-big">$312,275</div><div class="stat-label">Average value of offers for alums</div></div></div></div>
+      </div>
+      <div class="col col-india">
+        <div class="col-label">India Brochure &middot; Final</div>
+        <div class="col-body"><p>Founded in 2014 in Santa Clara by Soham Mehta and Ryan Valles &mdash; 700+ instructors from <b>MAANG+</b>.</p><div class="stat-row"><div class="stat"><div class="stat-big">27,000+</div><div class="stat-label">Tech professionals trained</div></div><div class="stat"><div class="stat-big">60%</div><div class="stat-label">Average salary hike for learners</div></div><div class="stat"><div class="stat-big">5x–7x</div><div class="stat-label">Average ROI on course price</div></div></div><p class="note">Highest salary: $1.2M &middot; Avg. offer value: $312,275 (global IK alumni figures; India-specific figures to follow)</p><div class="flag">⚑ 27,000+ replaces stale 25,000+; hike reconciled to 60% (matches the India webinar form) instead of 66.5%; USD stats kept but explicitly labeled as global, not India-specific.</div></div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="page" id="page-19">
+    <div class="page-head">
+      <div class="page-num">Page 19</div>
+      <h2>Alumni Benefits</h2>
+      <span class="badge badge-low">Minor / no change</span>
+    </div>
+    <div class="cols">
+      <div class="col col-us">
+        <div class="col-label">US Brochure &middot; Original</div>
+        <div class="col-body"><p>Community, peer learning, event invitations, continued career support.</p><div class="stat-row"><div class="stat"><div class="stat-big">25,000+</div><div class="stat-label">Engineers trained</div></div><div class="stat"><div class="stat-big">66.5%</div><div class="stat-label">Avg salary hike</div></div><div class="stat"><div class="stat-big">$312K</div><div class="stat-label">Avg offer value</div></div></div></div>
+      </div>
+      <div class="col col-india">
+        <div class="col-label">India Brochure &middot; Final</div>
+        <div class="col-body"><p>Community, peer learning, event invitations, continued career support.</p><div class="stat-row"><div class="stat"><div class="stat-big">27,000+</div><div class="stat-label">Engineers trained</div></div><div class="stat"><div class="stat-big">60%</div><div class="stat-label">Avg salary hike</div></div><div class="stat"><div class="stat-big">$312K</div><div class="stat-label">Avg offer value (global alumni)</div></div></div><div class="flag">⚑ Mirrors whatever Page 18 resolves to, so the two pages don't drift out of sync.</div></div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="page" id="page-20">
+    <div class="page-head">
+      <div class="page-num">Page 20</div>
+      <h2>Enrollment Process</h2>
+      <span class="badge badge-low">Minor / no change</span>
+    </div>
+    <div class="cols">
+      <div class="col col-us">
+        <div class="col-label">US Brochure &middot; Original</div>
+        <div class="col-body"><ul><li>Register for our pre-enrollment webinar</li><li>Attend the webinar</li><li>Begin the enrollment process</li><li>Work with a program advisor</li><li>Get a 1:1 consultation</li></ul><p class="lead">Talk to a Program Advisor and join the next cohort. Talk to Your Program Advisor →</p></div>
+      </div>
+      <div class="col col-india">
+        <div class="col-label">India Brochure &middot; Final</div>
+        <div class="col-body"><ul><li>Register for our webinar</li><li>Attend the webinar</li><li>Begin the enrollment process</li><li>Work with a program advisor</li><li>Get a 1:1 consultation</li></ul><p class="lead">Register for Free Career Session and join the next cohort.</p><div class="flag">⚑ CTA aligned to match the hero CTA (“Register for Free Career Session”) instead of a separate “Talk to a Program Advisor” phrase.</div></div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="page" id="page-21">
+    <div class="page-head">
+      <div class="page-num">Page 21</div>
+      <h2>Certificate of Completion</h2>
+      <span class="badge badge-low">Minor / no change</span>
+    </div>
+    <div class="cols">
+      <div class="col col-us">
+        <div class="col-label">US Brochure &middot; Original</div>
+        <div class="col-body"><p>Proudly presented to <b>Susan John</b> for successfully completing the FDE Program. Signed: Ryan Valles & Soham Mehta, Co-Founders.</p></div>
+      </div>
+      <div class="col col-india">
+        <div class="col-label">India Brochure &middot; Final</div>
+        <div class="col-body"><p>Proudly presented to <b>Priya Sharma</b> for successfully completing the FDE Program. Signed: Ryan Valles & Soham Mehta, Co-Founders.</p><div class="flag">⚑ Cosmetic only — example name swapped for design polish. Not a required change.</div></div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="page" id="page-22">
+    <div class="page-head">
+      <div class="page-num">Page 22</div>
+      <h2>Closing / Thank You</h2>
+      <span class="badge badge-low">Minor / no change</span>
+    </div>
+    <div class="cols">
+      <div class="col col-us">
+        <div class="col-label">US Brochure &middot; Original</div>
+        <div class="col-body"><p>Thank You! Where ambitious engineers leap forward.</p></div>
+      </div>
+      <div class="col col-india">
+        <div class="col-label">India Brochure &middot; Final</div>
+        <div class="col-body"><p>Thank You! Where ambitious engineers leap forward.</p><div class="flag">⚑ No change — tagline is market-neutral.</div></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+<footer>Prepared for the India FDE launch team &middot; source priority: India LP &gt; India brochure &gt; US brochure (reference only) &gt; US website</footer>
+</body>
+</html>
