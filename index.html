@@ -117,12 +117,14 @@
 
   /* ---- commenting: highlights + markers ---- */
   .col-body .commented { background: var(--ink-bg); border-radius: 2px; padding: 0 1px; cursor: pointer; }
+  .col-body .commented.resolved { background: var(--low-bg); }
   .comment-marker {
     display: inline-flex; align-items: center; justify-content: center;
     background: var(--ink); color: #3a2a00; font-weight: 800; font-size: 9px;
     width: 14px; height: 14px; border-radius: 50%; margin-left: 2px; cursor: pointer;
     vertical-align: super; user-select: none;
   }
+  .comment-marker.resolved { background: var(--low); color: white; }
 
   /* ---- floating "add comment" button ---- */
   #add-comment-btn {
@@ -149,8 +151,7 @@
   #comment-popup-cancel { background: #eee; color: #333; }
 
   /* ---- comments drawer ---- */
-  #comments-toggle {
-    position: fixed; right: 22px; bottom: 22px; z-index: 220;
+  #comments-toggle { position: fixed; right: 22px; bottom: 22px; z-index: 220;
     background: var(--navy); color: white; border: none; border-radius: 24px;
     padding: 12px 18px; font-size: 14px; font-weight: 700; cursor: pointer;
     box-shadow: 0 6px 18px rgba(0,0,0,0.28); display: flex; align-items: center; gap: 8px;
@@ -158,6 +159,23 @@
   #comments-toggle .count {
     background: var(--ink-bg); color: var(--ink); border-radius: 12px; padding: 1px 8px; font-size: 12px;
   }
+  #sync-badge { font-size: 9.5px; font-weight: 600; background: rgba(255,255,255,0.16); padding: 2px 7px; border-radius: 10px; }
+  .panel-hint { padding: 6px 14px; font-size: 11px; color: var(--grey); border-bottom: 1px solid #f0f0ec; }
+  .cmt-reply { font-size: 12px; background: #F3F6FF; border-left: 3px solid var(--blue); padding: 5px 8px; margin: 6px 0; border-radius: 4px; color: #24365e; }
+  .cmt-reply-form textarea {
+    width: 100%; min-height: 50px; font-size: 12.5px; margin-top: 6px; border-radius: 6px;
+    border: 1px solid #ccc; padding: 6px; font-family: inherit;
+  }
+  .cmt-reply-actions { display: flex; justify-content: flex-end; gap: 6px; margin-top: 4px; }
+  .cmt-reply-actions button { font-size: 11px; padding: 4px 9px; border-radius: 6px; border: 1px solid #ccc; background: #fff; cursor: pointer; }
+  .cmt-actions { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+  .cmt-actions button {
+    font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 12px;
+    border: 1px solid #ddd; background: #f7f7f5; cursor: pointer; color: #444;
+  }
+  .cmt-row.resolved { background: #FAFFFB; border-color: #cdeed4; }
+  .cmt-row.resolved .cmt-resolve { background: var(--low-bg); color: var(--low); border-color: var(--low); }
+  .cmt-actions .cmt-del:hover { background: var(--high-bg); color: var(--high); border-color: var(--high); }
   #comments-panel {
     position: fixed; right: 22px; bottom: 78px; z-index: 219;
     width: 380px; max-height: 70vh; background: white; border-radius: 12px;
@@ -178,16 +196,11 @@
   .cmt-group:first-child .cmt-group-head { margin-top: 4px; }
   .cmt-row { border: 1px solid #eee; border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; position: relative; transition: background 0.4s; }
   .cmt-row.flash { background: var(--ink-bg); }
-  .cmt-quote { font-size: 12px; font-style: italic; color: #555; margin-bottom: 4px; padding-right: 18px; }
+  .cmt-quote { font-size: 12px; font-style: italic; color: #555; margin-bottom: 4px; }
   .cmt-col { font-style: normal; font-weight: 700; font-size: 10px; padding: 1px 6px; border-radius: 8px; margin-left: 4px; }
   .cmt-col-US { background: #E7E6E1; color: #666; }
   .cmt-col-India { background: var(--light); color: var(--blue); }
   .cmt-text { font-size: 13px; color: #111; }
-  .cmt-del {
-    position: absolute; top: 6px; right: 6px; border: none; background: none; color: #aaa;
-    cursor: pointer; font-size: 12px;
-  }
-  .cmt-del:hover { color: var(--high); }
   .panel-actions { padding: 10px 14px; border-top: 1px solid #eee; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
   .panel-actions button {
     font-size: 12px; font-weight: 600; padding: 7px 8px; border-radius: 6px; border: 1px solid #d7d7d2;
@@ -195,6 +208,7 @@
   }
   .panel-actions button.primary { background: var(--navy); color: white; border-color: var(--navy); grid-column: 1 / -1; }
   .panel-actions button:hover { filter: brightness(0.97); }
+
 
   /* ---- toast ---- */
   #toast {
@@ -216,6 +230,9 @@
   </div>
   <div class="metrics-bar">
     <span>💬 <b id="m-total">0</b> comments</span>
+    <span class="sep">&middot;</span>
+    <span>✅ <b id="m-resolved">0</b> resolved</span>
+    <span>🟡 <b id="m-open">0</b> open</span>
     <span class="sep">&middot;</span>
     <span>📄 <b id="m-pages">0 / 18</b> sections touched</span>
     <span class="sep">&middot;</span>
@@ -601,7 +618,7 @@
   </div>
 </div>
 
-<button id="comments-toggle">💬 Comments <span class="count">0</span></button>
+<button id="comments-toggle">💬 Comments <span class="count">0</span><span id="sync-badge"></span></button>
 <div id="comments-panel">
   <div class="panel-head">
     <h3>Comments &amp; Suggestions</h3>
@@ -609,9 +626,11 @@
   </div>
   <div class="panel-metrics">
     <span><b id="pm-total">0</b> total</span>
+    <span><b id="pm-resolved">0</b> resolved</span>
     <span><b id="pm-pages">0</b> sections</span>
     <span><b id="pm-high">0</b> on high-priority pages</span>
   </div>
+  <div class="panel-hint">Resolved comments stay visible here but are left out of the exported prompt by default.</div>
   <div id="comments-list"></div>
   <div class="panel-actions">
     <button class="primary" id="btn-copy-prompt">📋 Copy Prompt for Claude</button>
@@ -629,7 +648,10 @@
   var comments = [];
   var nextId = 1;
   var pendingRange = null;
+  var openReplyId = null;
   var TOTAL_PAGES = 18;
+  var STORAGE_KEY = 'ik-brochure-comments';
+  var hasStorage = (typeof window.storage !== 'undefined' && window.storage !== null);
 
   var selectBtn = document.getElementById('add-comment-btn');
   var popup = document.getElementById('comment-popup');
@@ -645,6 +667,18 @@
     toastEl.classList.add('show');
     clearTimeout(toastTimer);
     toastTimer = setTimeout(function () { toastEl.classList.remove('show'); }, 2400);
+  }
+
+  function updateSyncBadge() {
+    var el = document.getElementById('sync-badge');
+    if (!el) return;
+    if (hasStorage) {
+      el.textContent = '🟢 Synced';
+      el.title = 'Comments save automatically and are shared with anyone who opens this.';
+    } else {
+      el.textContent = '💾 Local only';
+      el.title = 'Storage isn\'t available in this view (e.g. opened as a standalone file). Use Save/Load Backup to keep your comments.';
+    }
   }
 
   function hideSelectBtn() { selectBtn.style.display = 'none'; }
@@ -710,7 +744,105 @@
     return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 
-  function saveComment(range, text) {
+  function buildHighlight(comment) {
+    var span = document.createElement('span');
+    span.className = 'commented';
+    span.setAttribute('data-id', comment.id);
+    var marker = document.createElement('sup');
+    marker.className = 'comment-marker';
+    marker.textContent = comment.id;
+    marker.setAttribute('data-id', comment.id);
+    marker.title = comment.text;
+    return { span: span, marker: marker };
+  }
+
+  function updateMarkerStyle(comment) {
+    var span = document.querySelector('.commented[data-id="' + comment.id + '"]');
+    if (!span) return;
+    span.classList.toggle('resolved', !!comment.resolved);
+    var marker = span.querySelector('.comment-marker');
+    if (marker) marker.classList.toggle('resolved', !!comment.resolved);
+  }
+
+  function removeHighlight(id) {
+    var span = document.querySelector('.commented[data-id="' + id + '"]');
+    if (span) {
+      var parent = span.parentNode;
+      var marker = span.querySelector('.comment-marker');
+      if (marker) span.removeChild(marker);
+      while (span.firstChild) parent.insertBefore(span.firstChild, span);
+      parent.removeChild(span);
+    }
+  }
+
+  // Re-find a comment's quoted text in the live DOM and re-wrap it with a highlight.
+  // Needed because highlights themselves aren't stored — only page/column/quote text is —
+  // so every load (or sync from another session) has to re-anchor them.
+  function reanchor(comment) {
+    if (document.querySelector('.commented[data-id="' + comment.id + '"]')) return;
+    var colClass = comment.column === 'US' ? 'col-us' : 'col-india';
+    var pageEl = document.getElementById(comment.pageId);
+    if (!pageEl || !comment.quote) return;
+    var container = pageEl.querySelector('.' + colClass + ' .col-body');
+    if (!container) return;
+
+    var walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null);
+    var node, offset = 0, nodes = [];
+    while ((node = walker.nextNode())) {
+      nodes.push({ node: node, start: offset, end: offset + node.nodeValue.length });
+      offset += node.nodeValue.length;
+    }
+    var full = nodes.map(function (n) { return n.node.nodeValue; }).join('');
+    var idx = full.indexOf(comment.quote);
+    if (idx === -1) return;
+    var startIdx = idx, endIdx = idx + comment.quote.length;
+    var startInfo, endInfo, startOffset, endOffset;
+    nodes.forEach(function (n) {
+      if (!startInfo && startIdx >= n.start && startIdx < n.end) { startInfo = n; startOffset = startIdx - n.start; }
+      if (!endInfo && endIdx > n.start && endIdx <= n.end) { endInfo = n; endOffset = endIdx - n.start; }
+    });
+    if (!startInfo || !endInfo) return;
+    try {
+      var range = document.createRange();
+      range.setStart(startInfo.node, startOffset);
+      range.setEnd(endInfo.node, endOffset);
+      var built = buildHighlight(comment);
+      wrapRange(range, built.span);
+      built.span.appendChild(built.marker);
+      updateMarkerStyle(comment);
+    } catch (e) { /* text moved/changed since the comment was made — skip highlight, still shown in panel */ }
+  }
+
+  async function fetchRemoteComments() {
+    if (!hasStorage) return comments;
+    try {
+      var res = await window.storage.get(STORAGE_KEY, true);
+      if (res && res.value) return JSON.parse(res.value);
+    } catch (e) { /* key doesn't exist yet */ }
+    return [];
+  }
+
+  async function persist() {
+    if (!hasStorage) return;
+    try {
+      await window.storage.set(STORAGE_KEY, JSON.stringify(comments), true);
+    } catch (e) {
+      showToast('Could not sync just now — your comment is still here locally');
+    }
+  }
+
+  function applyIncoming(fresh) {
+    var freshIds = {};
+    fresh.forEach(function (c) { freshIds[c.id] = true; });
+    comments.forEach(function (c) { if (!freshIds[c.id]) removeHighlight(c.id); });
+    comments = fresh;
+    var maxId = 0;
+    comments.forEach(function (c) { if (c.id > maxId) maxId = c.id; });
+    nextId = Math.max(nextId, maxId + 1);
+    comments.forEach(function (c) { reanchor(c); updateMarkerStyle(c); });
+  }
+
+  async function saveComment(range, text) {
     var container = range.commonAncestorContainer;
     var el = container.nodeType === 3 ? container.parentElement : container;
     var pageEl = el.closest('.page');
@@ -721,39 +853,63 @@
     var quote = range.toString();
     var id = nextId++;
 
-    var span = document.createElement('span');
-    span.className = 'commented';
-    span.setAttribute('data-id', id);
-    var marker = document.createElement('sup');
-    marker.className = 'comment-marker';
-    marker.textContent = id;
-    marker.setAttribute('data-id', id);
-    marker.title = text;
+    var comment = { id: id, pageId: pageId, pageNum: meta.num, pageTitle: meta.title, status: meta.status, column: column, quote: quote, text: text, resolved: false, reply: '' };
+    var built = buildHighlight(comment);
+    wrapRange(range, built.span);
+    built.span.appendChild(built.marker);
 
-    wrapRange(range, span);
-    span.appendChild(marker);
-
-    comments.push({ id: id, pageId: pageId, pageNum: meta.num, pageTitle: meta.title, status: meta.status, column: column, quote: quote, text: text });
+    comments.push(comment);
     renderAll();
-    showToast('Comment added');
+    await persist();
+    showToast(hasStorage ? 'Comment added — synced for anyone viewing this' : 'Comment added (this device only — use Save Backup to keep it)');
   }
 
-  function deleteComment(id) {
+  async function deleteComment(id) {
     comments = comments.filter(function (c) { return c.id !== id; });
-    var span = document.querySelector('.commented[data-id="' + id + '"]');
-    if (span) {
-      var parent = span.parentNode;
-      var marker = span.querySelector('.comment-marker');
-      if (marker) span.removeChild(marker);
-      while (span.firstChild) parent.insertBefore(span.firstChild, span);
-      parent.removeChild(span);
-    }
+    removeHighlight(id);
     renderAll();
+    await persist();
+  }
+
+  async function toggleResolved(id) {
+    var c = comments.filter(function (c) { return c.id === id; })[0];
+    if (!c) return;
+    c.resolved = !c.resolved;
+    updateMarkerStyle(c);
+    renderAll();
+    await persist();
+  }
+
+  async function saveReply(id, replyText) {
+    var c = comments.filter(function (c) { return c.id === id; })[0];
+    if (!c) return;
+    c.reply = replyText;
+    openReplyId = null;
+    renderAll();
+    await persist();
   }
 
   panelList.addEventListener('click', function (e) {
     var delBtn = e.target.closest('.cmt-del');
     if (delBtn) { deleteComment(Number(delBtn.getAttribute('data-id'))); return; }
+
+    var resolveBtn = e.target.closest('.cmt-resolve');
+    if (resolveBtn) { toggleResolved(Number(resolveBtn.getAttribute('data-id'))); return; }
+
+    var replyToggle = e.target.closest('.cmt-reply-toggle');
+    if (replyToggle) { openReplyId = Number(replyToggle.getAttribute('data-id')); renderAll(); return; }
+
+    var replyCancel = e.target.closest('.cmt-reply-cancel');
+    if (replyCancel) { openReplyId = null; renderAll(); return; }
+
+    var replySave = e.target.closest('.cmt-reply-save');
+    if (replySave) {
+      var id = Number(replySave.getAttribute('data-id'));
+      var ta = panelList.querySelector('.cmt-reply-input[data-id="' + id + '"]');
+      saveReply(id, ta ? ta.value.trim() : '');
+      return;
+    }
+
     var jump = e.target.closest('.cmt-group-head');
     if (jump) {
       var pel = document.getElementById(jump.getAttribute('data-page'));
@@ -776,6 +932,8 @@
 
   function renderAll() {
     var total = comments.length;
+    var resolvedCount = comments.filter(function (c) { return c.resolved; }).length;
+    var openCount = total - resolvedCount;
     var pagesTouched = {};
     var byStatus = { high: 0, medium: 0, low: 0 };
     var byCol = { US: 0, India: 0 };
@@ -787,6 +945,8 @@
     var pagesTouchedCount = Object.keys(pagesTouched).length;
 
     document.getElementById('m-total').textContent = total;
+    document.getElementById('m-resolved').textContent = resolvedCount;
+    document.getElementById('m-open').textContent = openCount;
     document.getElementById('m-pages').textContent = pagesTouchedCount + ' / ' + TOTAL_PAGES;
     document.getElementById('m-high').textContent = byStatus.high;
     document.getElementById('m-medium').textContent = byStatus.medium;
@@ -794,6 +954,7 @@
     document.getElementById('m-us').textContent = byCol.US;
     document.getElementById('m-india').textContent = byCol.India;
     document.getElementById('pm-total').textContent = total;
+    document.getElementById('pm-resolved').textContent = resolvedCount;
     document.getElementById('pm-pages').textContent = pagesTouchedCount;
     document.getElementById('pm-high').textContent = byStatus.high;
     panelToggle.querySelector('.count').textContent = total;
@@ -831,11 +992,20 @@
       var list = grouped[pid];
       html += '<div class="cmt-group"><div class="cmt-group-head" data-page="' + pid + '">Page ' + list[0].pageNum + ' — ' + escapeHtml(list[0].pageTitle) + '</div>';
       list.forEach(function (c) {
-        html += '<div class="cmt-row" data-id="' + c.id + '">' +
+        html += '<div class="cmt-row' + (c.resolved ? ' resolved' : '') + '" data-id="' + c.id + '">' +
           '<div class="cmt-quote">“' + escapeHtml(c.quote) + '”<span class="cmt-col cmt-col-' + c.column + '">' + c.column + '</span></div>' +
           '<div class="cmt-text">' + escapeHtml(c.text) + '</div>' +
-          '<button class="cmt-del" data-id="' + c.id + '" title="Delete">✕</button>' +
-          '</div>';
+          (c.reply ? '<div class="cmt-reply"><b>Reply:</b> ' + escapeHtml(c.reply) + '</div>' : '') +
+          (openReplyId === c.id
+            ? '<div class="cmt-reply-form"><textarea class="cmt-reply-input" data-id="' + c.id + '" placeholder="Write a reply&hellip;">' + escapeHtml(c.reply || '') + '</textarea>' +
+              '<div class="cmt-reply-actions"><button class="cmt-reply-cancel" data-id="' + c.id + '">Cancel</button><button class="cmt-reply-save" data-id="' + c.id + '">Save Reply</button></div></div>'
+            : '') +
+          '<div class="cmt-actions">' +
+            '<button class="cmt-resolve" data-id="' + c.id + '">' + (c.resolved ? '✓ Resolved' : 'Mark Resolved') + '</button>' +
+            '<button class="cmt-reply-toggle" data-id="' + c.id + '">' + (c.reply ? 'Edit Reply' : 'Reply') + '</button>' +
+            '<button class="cmt-del" data-id="' + c.id + '" title="Delete">✕ Delete</button>' +
+          '</div>' +
+        '</div>';
       });
       html += '</div>';
     });
@@ -843,14 +1013,18 @@
   }
 
   function buildPrompt() {
+    var openComments = comments.filter(function (c) { return !c.resolved; });
+    var resolvedCount = comments.length - openComments.length;
     if (comments.length === 0) return 'No comments have been added yet — select some text in the comparison doc first.';
+    if (openComments.length === 0) return 'All ' + resolvedCount + ' comment(s) are marked resolved — nothing open to action. Unmark a comment as resolved if you want it included here.';
+
     var out = '# Change Requests — IK India FDE Brochure Comparison\n\n';
     var uniquePages = {};
-    comments.forEach(function (c) { uniquePages[c.pageId] = true; });
-    out += 'I reviewed the US-vs-India brochure comparison and have ' + comments.length + ' change request(s) across ' + Object.keys(uniquePages).length + ' page(s). Please update the India brochure (and the comparison doc) to address each of these.\n\n';
+    openComments.forEach(function (c) { uniquePages[c.pageId] = true; });
+    out += 'I reviewed the US-vs-India brochure comparison and have ' + openComments.length + ' open change request(s) across ' + Object.keys(uniquePages).length + ' page(s). Please update the India brochure (and the comparison doc) to address each of these.\n\n';
     var grouped = {};
     var order = [];
-    comments.forEach(function (c) {
+    openComments.forEach(function (c) {
       if (!grouped[c.pageId]) { grouped[c.pageId] = []; order.push(c.pageId); }
       grouped[c.pageId].push(c);
     });
@@ -864,9 +1038,12 @@
       out += '## Page ' + list[0].pageNum + ' — ' + list[0].pageTitle + '\n\n';
       list.forEach(function (c) {
         out += '- Selected text (' + c.column + ' column): "' + c.quote + '"\n';
-        out += '  Request: ' + c.text + '\n\n';
+        out += '  Request: ' + c.text + '\n';
+        if (c.reply) out += '  (Reply on file: ' + c.reply + ')\n';
+        out += '\n';
       });
     });
+    if (resolvedCount > 0) out += '\n(' + resolvedCount + ' other comment(s) are marked resolved and were left out of this prompt.)\n';
     return out;
   }
 
@@ -912,12 +1089,10 @@
       try {
         var loaded = JSON.parse(reader.result);
         if (Array.isArray(loaded)) {
-          comments = loaded;
-          var maxId = 0;
-          comments.forEach(function (c) { if (c.id > maxId) maxId = c.id; });
-          nextId = maxId + 1;
+          applyIncoming(loaded);
           renderAll();
-          showToast('Backup loaded (' + loaded.length + ' comments) — note: highlights only show for comments made this session');
+          persist();
+          showToast('Backup loaded (' + loaded.length + ' comments)' + (hasStorage ? ' and synced' : ''));
         }
       } catch (err) { showToast('Could not read that file'); }
     };
@@ -925,10 +1100,38 @@
     e.target.value = '';
   });
 
-  panelToggle.addEventListener('click', function () { panel.classList.toggle('open'); });
+  panelToggle.addEventListener('click', async function () {
+    panel.classList.toggle('open');
+    if (panel.classList.contains('open') && hasStorage) {
+      applyIncoming(await fetchRemoteComments());
+      renderAll();
+    }
+  });
   document.getElementById('panel-close').addEventListener('click', function () { panel.classList.remove('open'); });
 
-  renderAll();
+  async function pollForUpdates() {
+    if (!hasStorage) return;
+    try {
+      var fresh = await fetchRemoteComments();
+      var sig = function (list) { return JSON.stringify(list.map(function (c) { return [c.id, c.resolved, c.reply, c.text]; })); };
+      if (sig(fresh) !== sig(comments)) {
+        applyIncoming(fresh);
+        renderAll();
+        showToast('Comments updated from another session');
+      }
+    } catch (e) { /* ignore transient errors */ }
+  }
+
+  async function init() {
+    updateSyncBadge();
+    if (hasStorage) {
+      try { applyIncoming(await fetchRemoteComments()); } catch (e) { /* nothing saved yet */ }
+      setInterval(pollForUpdates, 20000);
+    }
+    renderAll();
+  }
+
+  init();
 })();
 </script>
 </body>
