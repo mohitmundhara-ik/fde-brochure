@@ -17,6 +17,8 @@
     --medium-bg: #FDF3DE;
     --low: #1E7B34;
     --low-bg: #EAF6EC;
+    --ink: #7A5B00;
+    --ink-bg: #FFF3B0;
   }
   * { box-sizing: border-box; }
   body {
@@ -41,16 +43,30 @@
   .dot-high { background: #E5675F; } .dot-medium { background: #E3B341; } .dot-low { background: #5FBE79; }
   .nav-chips { display: flex; flex-wrap: wrap; gap: 6px; }
   .chip {
-    display: inline-block; padding: 3px 9px; border-radius: 12px; font-size: 12px;
+    position: relative; display: inline-block; padding: 3px 9px; border-radius: 12px; font-size: 12px;
     text-decoration: none; color: white; border: 1px solid rgba(255,255,255,0.25);
     background: rgba(255,255,255,0.08); transition: background 0.15s;
   }
   .chip:hover { background: rgba(255,255,255,0.22); }
   .chip-high { border-color: #E5675F; } .chip-medium { border-color: #E3B341; } .chip-low { border-color: #5FBE79; }
+  .chip-cmt {
+    display: none; position: absolute; top: -7px; right: -7px; background: var(--ink); color: #3a2a00;
+    font-size: 9px; font-weight: 800; border-radius: 9px; min-width: 15px; height: 15px; line-height: 15px;
+    text-align: center; padding: 0 3px;
+  }
 
-  main { max-width: 1180px; margin: 0 auto; padding: 24px 24px 80px; }
+  /* ---- suggestion metrics bar ---- */
+  .metrics-bar {
+    display: flex; flex-wrap: wrap; gap: 14px; align-items: center;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px; padding: 8px 12px; margin-bottom: 10px; font-size: 12.5px; color: #EAF1FB;
+  }
+  .metrics-bar b { color: #fff; }
+  .metrics-bar .sep { opacity: 0.35; }
 
-  .page { margin-bottom: 34px; scroll-margin-top: 168px; }
+  main { max-width: 1180px; margin: 0 auto; padding: 24px 24px 120px; }
+
+  .page { margin-bottom: 34px; scroll-margin-top: 210px; }
   .page-head {
     display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px;
     border-bottom: 3px solid var(--navy); padding-bottom: 8px;
@@ -61,6 +77,10 @@
   .badge-high { color: var(--high); background: var(--high-bg); }
   .badge-medium { color: var(--medium); background: var(--medium-bg); }
   .badge-low { color: var(--low); background: var(--low-bg); }
+  .cmt-badge {
+    display: none; font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 20px;
+    white-space: nowrap; color: var(--ink); background: var(--ink-bg);
+  }
 
   .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
   @media (max-width: 860px) { .cols { grid-template-columns: 1fr; } }
@@ -94,18 +114,119 @@
   }
 
   footer { text-align: center; padding: 30px; color: var(--grey); font-size: 12.5px; }
+
+  /* ---- commenting: highlights + markers ---- */
+  .col-body .commented { background: var(--ink-bg); border-radius: 2px; padding: 0 1px; cursor: pointer; }
+  .comment-marker {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--ink); color: #3a2a00; font-weight: 800; font-size: 9px;
+    width: 14px; height: 14px; border-radius: 50%; margin-left: 2px; cursor: pointer;
+    vertical-align: super; user-select: none;
+  }
+
+  /* ---- floating "add comment" button ---- */
+  #add-comment-btn {
+    display: none; position: absolute; z-index: 200; transform: translateY(-100%);
+    background: var(--navy); color: white; border: none; border-radius: 6px;
+    padding: 6px 12px; font-size: 12.5px; font-weight: 600; cursor: pointer;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+  }
+  #add-comment-btn:hover { background: var(--blue); }
+
+  /* ---- comment popup form ---- */
+  #comment-popup {
+    display: none; position: absolute; z-index: 210; width: 300px;
+    background: white; border: 1px solid #d7d7d2; border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.18); padding: 12px;
+  }
+  #comment-popup textarea {
+    width: 100%; min-height: 74px; resize: vertical; font-family: inherit; font-size: 13.5px;
+    border: 1px solid #ccc; border-radius: 6px; padding: 8px; margin-bottom: 8px;
+  }
+  #comment-popup .popup-actions { display: flex; justify-content: flex-end; gap: 8px; }
+  #comment-popup button { border: none; border-radius: 6px; padding: 6px 12px; font-size: 12.5px; cursor: pointer; font-weight: 600; }
+  #comment-popup-save { background: var(--navy); color: white; }
+  #comment-popup-cancel { background: #eee; color: #333; }
+
+  /* ---- comments drawer ---- */
+  #comments-toggle {
+    position: fixed; right: 22px; bottom: 22px; z-index: 220;
+    background: var(--navy); color: white; border: none; border-radius: 24px;
+    padding: 12px 18px; font-size: 14px; font-weight: 700; cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.28); display: flex; align-items: center; gap: 8px;
+  }
+  #comments-toggle .count {
+    background: var(--ink-bg); color: var(--ink); border-radius: 12px; padding: 1px 8px; font-size: 12px;
+  }
+  #comments-panel {
+    position: fixed; right: 22px; bottom: 78px; z-index: 219;
+    width: 380px; max-height: 70vh; background: white; border-radius: 12px;
+    box-shadow: 0 10px 34px rgba(0,0,0,0.28); border: 1px solid #e2e2dc;
+    display: none; flex-direction: column; overflow: hidden;
+  }
+  #comments-panel.open { display: flex; }
+  .panel-head { background: var(--navy); color: white; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; }
+  .panel-head h3 { margin: 0; font-size: 14.5px; }
+  .panel-head button { background: none; border: none; color: white; font-size: 16px; cursor: pointer; }
+  .panel-metrics { padding: 10px 14px; border-bottom: 1px solid #eee; font-size: 12px; color: #444; display: flex; flex-wrap: wrap; gap: 8px 12px; }
+  .panel-metrics b { color: var(--navy); }
+  #comments-list { overflow-y: auto; padding: 8px 14px; flex: 1; }
+  .cmt-empty { color: var(--grey); font-size: 13px; padding: 16px 0; text-align: center; }
+  .cmt-group-head {
+    font-size: 12px; font-weight: 700; color: var(--blue); margin: 12px 0 6px; cursor: pointer;
+  }
+  .cmt-group:first-child .cmt-group-head { margin-top: 4px; }
+  .cmt-row { border: 1px solid #eee; border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; position: relative; transition: background 0.4s; }
+  .cmt-row.flash { background: var(--ink-bg); }
+  .cmt-quote { font-size: 12px; font-style: italic; color: #555; margin-bottom: 4px; padding-right: 18px; }
+  .cmt-col { font-style: normal; font-weight: 700; font-size: 10px; padding: 1px 6px; border-radius: 8px; margin-left: 4px; }
+  .cmt-col-US { background: #E7E6E1; color: #666; }
+  .cmt-col-India { background: var(--light); color: var(--blue); }
+  .cmt-text { font-size: 13px; color: #111; }
+  .cmt-del {
+    position: absolute; top: 6px; right: 6px; border: none; background: none; color: #aaa;
+    cursor: pointer; font-size: 12px;
+  }
+  .cmt-del:hover { color: var(--high); }
+  .panel-actions { padding: 10px 14px; border-top: 1px solid #eee; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .panel-actions button {
+    font-size: 12px; font-weight: 600; padding: 7px 8px; border-radius: 6px; border: 1px solid #d7d7d2;
+    background: #f7f7f5; cursor: pointer;
+  }
+  .panel-actions button.primary { background: var(--navy); color: white; border-color: var(--navy); grid-column: 1 / -1; }
+  .panel-actions button:hover { filter: brightness(0.97); }
+
+  /* ---- toast ---- */
+  #toast {
+    position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%) translateY(20px);
+    background: #1a1a1a; color: white; padding: 9px 16px; border-radius: 20px; font-size: 13px;
+    opacity: 0; pointer-events: none; transition: all 0.25s; z-index: 300;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
 <header class="top">
   <h1>IK Forward Deployed AI Engineering Brochure &mdash; US Original vs. India Final</h1>
-  <div class="sub">Page-by-page comparison &middot; 22 pages &middot; click a page number to jump</div>
+  <div class="sub">Page-by-page comparison &middot; 22 pages &middot; select any text below to leave a comment or question</div>
   <div class="legend">
     <span><span class="dot dot-high"></span> Heavy rewrite (6 pages)</span>
     <span><span class="dot dot-medium"></span> Moderate edit (3 pages)</span>
     <span><span class="dot dot-low"></span> Minor / no change (9 pages)</span>
   </div>
-  <div class="nav-chips"><a href="#page-1" class="chip chip-high">1</a><a href="#page-2" class="chip chip-low">2</a><a href="#page-3" class="chip chip-high">3</a><a href="#page-4" class="chip chip-medium">4</a><a href="#page-5" class="chip chip-low">5</a><a href="#page-6" class="chip chip-high">6</a><a href="#page-7" class="chip chip-medium">7</a><a href="#page-8" class="chip chip-low">8</a><a href="#page-9–13" class="chip chip-high">9–13</a><a href="#page-14" class="chip chip-low">14</a><a href="#page-15" class="chip chip-high">15</a><a href="#page-16" class="chip chip-low">16</a><a href="#page-17" class="chip chip-high">17</a><a href="#page-18" class="chip chip-medium">18</a><a href="#page-19" class="chip chip-low">19</a><a href="#page-20" class="chip chip-low">20</a><a href="#page-21" class="chip chip-low">21</a><a href="#page-22" class="chip chip-low">22</a></div>
+  <div class="metrics-bar">
+    <span>💬 <b id="m-total">0</b> comments</span>
+    <span class="sep">&middot;</span>
+    <span>📄 <b id="m-pages">0 / 18</b> sections touched</span>
+    <span class="sep">&middot;</span>
+    <span>High: <b id="m-high">0</b></span>
+    <span>Medium: <b id="m-medium">0</b></span>
+    <span>Low: <b id="m-low">0</b></span>
+    <span class="sep">&middot;</span>
+    <span>US col: <b id="m-us">0</b></span>
+    <span>India col: <b id="m-india">0</b></span>
+  </div>
+  <div class="nav-chips"><a href="#page-1" class="chip chip-high" data-page="page-1">1<span class="chip-cmt" data-page-badge="page-1"></span></a><a href="#page-2" class="chip chip-low" data-page="page-2">2<span class="chip-cmt" data-page-badge="page-2"></span></a><a href="#page-3" class="chip chip-high" data-page="page-3">3<span class="chip-cmt" data-page-badge="page-3"></span></a><a href="#page-4" class="chip chip-medium" data-page="page-4">4<span class="chip-cmt" data-page-badge="page-4"></span></a><a href="#page-5" class="chip chip-low" data-page="page-5">5<span class="chip-cmt" data-page-badge="page-5"></span></a><a href="#page-6" class="chip chip-high" data-page="page-6">6<span class="chip-cmt" data-page-badge="page-6"></span></a><a href="#page-7" class="chip chip-medium" data-page="page-7">7<span class="chip-cmt" data-page-badge="page-7"></span></a><a href="#page-8" class="chip chip-low" data-page="page-8">8<span class="chip-cmt" data-page-badge="page-8"></span></a><a href="#page-9–13" class="chip chip-high" data-page="page-9–13">9–13<span class="chip-cmt" data-page-badge="page-9–13"></span></a><a href="#page-14" class="chip chip-low" data-page="page-14">14<span class="chip-cmt" data-page-badge="page-14"></span></a><a href="#page-15" class="chip chip-high" data-page="page-15">15<span class="chip-cmt" data-page-badge="page-15"></span></a><a href="#page-16" class="chip chip-low" data-page="page-16">16<span class="chip-cmt" data-page-badge="page-16"></span></a><a href="#page-17" class="chip chip-high" data-page="page-17">17<span class="chip-cmt" data-page-badge="page-17"></span></a><a href="#page-18" class="chip chip-medium" data-page="page-18">18<span class="chip-cmt" data-page-badge="page-18"></span></a><a href="#page-19" class="chip chip-low" data-page="page-19">19<span class="chip-cmt" data-page-badge="page-19"></span></a><a href="#page-20" class="chip chip-low" data-page="page-20">20<span class="chip-cmt" data-page-badge="page-20"></span></a><a href="#page-21" class="chip chip-low" data-page="page-21">21<span class="chip-cmt" data-page-badge="page-21"></span></a><a href="#page-22" class="chip chip-low" data-page="page-22">22<span class="chip-cmt" data-page-badge="page-22"></span></a></div>
 </header>
 <main>
 
@@ -113,6 +234,7 @@
     <div class="page-head">
       <div class="page-num">Page 1</div>
       <h2>Cover</h2>
+      <span class="cmt-badge" data-page="page-1"></span>
       <span class="badge badge-high">Heavy rewrite</span>
     </div>
     <div class="cols">
@@ -132,6 +254,7 @@
     <div class="page-head">
       <div class="page-num">Page 2</div>
       <h2>Move Beyond Demos. Ship Production Systems.</h2>
+      <span class="cmt-badge" data-page="page-2"></span>
       <span class="badge badge-low">Minor / no change</span>
     </div>
     <div class="cols">
@@ -151,6 +274,7 @@
     <div class="page-head">
       <div class="page-num">Page 3</div>
       <h2>Market Opportunity</h2>
+      <span class="cmt-badge" data-page="page-3"></span>
       <span class="badge badge-high">Heavy rewrite</span>
     </div>
     <div class="cols">
@@ -170,6 +294,7 @@
     <div class="page-head">
       <div class="page-num">Page 4</div>
       <h2>Who This Program Is For</h2>
+      <span class="cmt-badge" data-page="page-4"></span>
       <span class="badge badge-medium">Moderate edit</span>
     </div>
     <div class="cols">
@@ -189,6 +314,7 @@
     <div class="page-head">
       <div class="page-num">Page 5</div>
       <h2>Program at a Glance</h2>
+      <span class="cmt-badge" data-page="page-5"></span>
       <span class="badge badge-low">Minor / no change</span>
     </div>
     <div class="cols">
@@ -208,6 +334,7 @@
     <div class="page-head">
       <div class="page-num">Page 6</div>
       <h2>What Makes This Program Unique</h2>
+      <span class="cmt-badge" data-page="page-6"></span>
       <span class="badge badge-high">Heavy rewrite</span>
     </div>
     <div class="cols">
@@ -227,6 +354,7 @@
     <div class="page-head">
       <div class="page-num">Page 7</div>
       <h2>Tech Stack Covered Across the Program</h2>
+      <span class="cmt-badge" data-page="page-7"></span>
       <span class="badge badge-medium">Moderate edit</span>
     </div>
     <div class="cols">
@@ -246,6 +374,7 @@
     <div class="page-head">
       <div class="page-num">Page 8</div>
       <h2>Program Roadmap</h2>
+      <span class="cmt-badge" data-page="page-8"></span>
       <span class="badge badge-low">Minor / no change</span>
     </div>
     <div class="cols">
@@ -265,6 +394,7 @@
     <div class="page-head">
       <div class="page-num">Page 9–13</div>
       <h2>Curriculum · Week by Week (FDE Spine, Weeks 13–17)</h2>
+      <span class="cmt-badge" data-page="page-9–13"></span>
       <span class="badge badge-high">Heavy rewrite</span>
     </div>
     <div class="cols">
@@ -284,6 +414,7 @@
     <div class="page-head">
       <div class="page-num">Page 14</div>
       <h2>Live Guided Projects</h2>
+      <span class="cmt-badge" data-page="page-14"></span>
       <span class="badge badge-low">Minor / no change</span>
     </div>
     <div class="cols">
@@ -303,6 +434,7 @@
     <div class="page-head">
       <div class="page-num">Page 15</div>
       <h2>Capstone Projects</h2>
+      <span class="cmt-badge" data-page="page-15"></span>
       <span class="badge badge-high">Heavy rewrite</span>
     </div>
     <div class="cols">
@@ -322,6 +454,7 @@
     <div class="page-head">
       <div class="page-num">Page 16</div>
       <h2>Career & Bonus Tracks</h2>
+      <span class="cmt-badge" data-page="page-16"></span>
       <span class="badge badge-low">Minor / no change</span>
     </div>
     <div class="cols">
@@ -341,6 +474,7 @@
     <div class="page-head">
       <div class="page-num">Page 17</div>
       <h2>Your Instructors and Mentors</h2>
+      <span class="cmt-badge" data-page="page-17"></span>
       <span class="badge badge-high">Heavy rewrite</span>
     </div>
     <div class="cols">
@@ -360,6 +494,7 @@
     <div class="page-head">
       <div class="page-num">Page 18</div>
       <h2>About Interview Kickstart</h2>
+      <span class="cmt-badge" data-page="page-18"></span>
       <span class="badge badge-medium">Moderate edit</span>
     </div>
     <div class="cols">
@@ -379,6 +514,7 @@
     <div class="page-head">
       <div class="page-num">Page 19</div>
       <h2>Alumni Benefits</h2>
+      <span class="cmt-badge" data-page="page-19"></span>
       <span class="badge badge-low">Minor / no change</span>
     </div>
     <div class="cols">
@@ -398,6 +534,7 @@
     <div class="page-head">
       <div class="page-num">Page 20</div>
       <h2>Enrollment Process</h2>
+      <span class="cmt-badge" data-page="page-20"></span>
       <span class="badge badge-low">Minor / no change</span>
     </div>
     <div class="cols">
@@ -417,6 +554,7 @@
     <div class="page-head">
       <div class="page-num">Page 21</div>
       <h2>Certificate of Completion</h2>
+      <span class="cmt-badge" data-page="page-21"></span>
       <span class="badge badge-low">Minor / no change</span>
     </div>
     <div class="cols">
@@ -436,6 +574,7 @@
     <div class="page-head">
       <div class="page-num">Page 22</div>
       <h2>Closing / Thank You</h2>
+      <span class="cmt-badge" data-page="page-22"></span>
       <span class="badge badge-low">Minor / no change</span>
     </div>
     <div class="cols">
@@ -452,5 +591,345 @@
 
 </main>
 <footer>Prepared for the India FDE launch team &middot; source priority: India LP &gt; India brochure &gt; US brochure (reference only) &gt; US website</footer>
+
+<button id="add-comment-btn">+ Comment</button>
+<div id="comment-popup">
+  <textarea id="comment-popup-text" placeholder="Ask a question or suggest a change for this text&hellip;"></textarea>
+  <div class="popup-actions">
+    <button id="comment-popup-cancel">Cancel</button>
+    <button id="comment-popup-save">Save</button>
+  </div>
+</div>
+
+<button id="comments-toggle">💬 Comments <span class="count">0</span></button>
+<div id="comments-panel">
+  <div class="panel-head">
+    <h3>Comments &amp; Suggestions</h3>
+    <button id="panel-close">&times;</button>
+  </div>
+  <div class="panel-metrics">
+    <span><b id="pm-total">0</b> total</span>
+    <span><b id="pm-pages">0</b> sections</span>
+    <span><b id="pm-high">0</b> on high-priority pages</span>
+  </div>
+  <div id="comments-list"></div>
+  <div class="panel-actions">
+    <button class="primary" id="btn-copy-prompt">📋 Copy Prompt for Claude</button>
+    <button id="btn-download-prompt">Download Prompt (.md)</button>
+    <button id="btn-save-backup">Save Backup (.json)</button>
+    <button id="btn-load-backup">Load Backup (.json)</button>
+  </div>
+</div>
+<input type="file" id="file-load-backup" accept="application/json" style="display:none">
+<div id="toast"></div>
+
+<script>
+(function () {
+  var PAGES_META = {"page-1":{"num":"1","title":"Cover","status":"high"},"page-2":{"num":"2","title":"Move Beyond Demos. Ship Production Systems.","status":"low"},"page-3":{"num":"3","title":"Market Opportunity","status":"high"},"page-4":{"num":"4","title":"Who This Program Is For","status":"medium"},"page-5":{"num":"5","title":"Program at a Glance","status":"low"},"page-6":{"num":"6","title":"What Makes This Program Unique","status":"high"},"page-7":{"num":"7","title":"Tech Stack Covered Across the Program","status":"medium"},"page-8":{"num":"8","title":"Program Roadmap","status":"low"},"page-9–13":{"num":"9–13","title":"Curriculum · Week by Week (FDE Spine, Weeks 13–17)","status":"high"},"page-14":{"num":"14","title":"Live Guided Projects","status":"low"},"page-15":{"num":"15","title":"Capstone Projects","status":"high"},"page-16":{"num":"16","title":"Career & Bonus Tracks","status":"low"},"page-17":{"num":"17","title":"Your Instructors and Mentors","status":"high"},"page-18":{"num":"18","title":"About Interview Kickstart","status":"medium"},"page-19":{"num":"19","title":"Alumni Benefits","status":"low"},"page-20":{"num":"20","title":"Enrollment Process","status":"low"},"page-21":{"num":"21","title":"Certificate of Completion","status":"low"},"page-22":{"num":"22","title":"Closing / Thank You","status":"low"}};
+  var comments = [];
+  var nextId = 1;
+  var pendingRange = null;
+  var TOTAL_PAGES = 18;
+
+  var selectBtn = document.getElementById('add-comment-btn');
+  var popup = document.getElementById('comment-popup');
+  var popupText = document.getElementById('comment-popup-text');
+  var panel = document.getElementById('comments-panel');
+  var panelList = document.getElementById('comments-list');
+  var panelToggle = document.getElementById('comments-toggle');
+  var toastEl = document.getElementById('toast');
+  var toastTimer = null;
+
+  function showToast(msg) {
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.classList.remove('show'); }, 2400);
+  }
+
+  function hideSelectBtn() { selectBtn.style.display = 'none'; }
+
+  document.addEventListener('mouseup', function (e) {
+    if (e.target.closest('#comment-popup, #add-comment-btn, #comments-panel, #comments-toggle')) return;
+    setTimeout(function () {
+      var sel = window.getSelection();
+      var text = sel.toString().trim();
+      if (!text || sel.isCollapsed || sel.rangeCount === 0) { hideSelectBtn(); return; }
+      var range = sel.getRangeAt(0);
+      var container = range.commonAncestorContainer;
+      var el = container.nodeType === 3 ? container.parentElement : container;
+      var colBody = el.closest ? el.closest('.col-body') : null;
+      if (!colBody) { hideSelectBtn(); return; }
+      pendingRange = range.cloneRange();
+      var rect = range.getBoundingClientRect();
+      selectBtn.style.top = (window.scrollY + rect.top) + 'px';
+      selectBtn.style.left = (window.scrollX + rect.left) + 'px';
+      selectBtn.style.display = 'block';
+    }, 0);
+  });
+
+  document.addEventListener('mousedown', function (e) {
+    if (!e.target.closest('#add-comment-btn, #comment-popup')) hideSelectBtn();
+  });
+
+  selectBtn.addEventListener('click', function () {
+    var rect = selectBtn.getBoundingClientRect();
+    popup.style.top = (window.scrollY + rect.bottom + 6) + 'px';
+    popup.style.left = (window.scrollX + rect.left) + 'px';
+    popup.style.display = 'block';
+    popupText.value = '';
+    popupText.focus();
+    hideSelectBtn();
+  });
+
+  document.getElementById('comment-popup-cancel').addEventListener('click', function () {
+    popup.style.display = 'none';
+    pendingRange = null;
+  });
+
+  document.getElementById('comment-popup-save').addEventListener('click', function () {
+    var val = popupText.value.trim();
+    popup.style.display = 'none';
+    if (!val || !pendingRange) { pendingRange = null; return; }
+    saveComment(pendingRange, val);
+    pendingRange = null;
+    window.getSelection().removeAllRanges();
+  });
+
+  function wrapRange(range, span) {
+    try {
+      range.surroundContents(span);
+    } catch (e) {
+      var contents = range.extractContents();
+      span.appendChild(contents);
+      range.insertNode(span);
+    }
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function saveComment(range, text) {
+    var container = range.commonAncestorContainer;
+    var el = container.nodeType === 3 ? container.parentElement : container;
+    var pageEl = el.closest('.page');
+    var colEl = el.closest('.col-us, .col-india');
+    var column = colEl && colEl.classList.contains('col-us') ? 'US' : 'India';
+    var pageId = pageEl ? pageEl.id : 'unknown';
+    var meta = PAGES_META[pageId] || { num: '?', title: '', status: 'low' };
+    var quote = range.toString();
+    var id = nextId++;
+
+    var span = document.createElement('span');
+    span.className = 'commented';
+    span.setAttribute('data-id', id);
+    var marker = document.createElement('sup');
+    marker.className = 'comment-marker';
+    marker.textContent = id;
+    marker.setAttribute('data-id', id);
+    marker.title = text;
+
+    wrapRange(range, span);
+    span.appendChild(marker);
+
+    comments.push({ id: id, pageId: pageId, pageNum: meta.num, pageTitle: meta.title, status: meta.status, column: column, quote: quote, text: text });
+    renderAll();
+    showToast('Comment added');
+  }
+
+  function deleteComment(id) {
+    comments = comments.filter(function (c) { return c.id !== id; });
+    var span = document.querySelector('.commented[data-id="' + id + '"]');
+    if (span) {
+      var parent = span.parentNode;
+      var marker = span.querySelector('.comment-marker');
+      if (marker) span.removeChild(marker);
+      while (span.firstChild) parent.insertBefore(span.firstChild, span);
+      parent.removeChild(span);
+    }
+    renderAll();
+  }
+
+  panelList.addEventListener('click', function (e) {
+    var delBtn = e.target.closest('.cmt-del');
+    if (delBtn) { deleteComment(Number(delBtn.getAttribute('data-id'))); return; }
+    var jump = e.target.closest('.cmt-group-head');
+    if (jump) {
+      var pel = document.getElementById(jump.getAttribute('data-page'));
+      if (pel) pel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+
+  document.addEventListener('click', function (e) {
+    var marker = e.target.closest('.comment-marker');
+    if (marker) {
+      panel.classList.add('open');
+      var row = document.querySelector('.cmt-row[data-id="' + marker.getAttribute('data-id') + '"]');
+      if (row) {
+        row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        row.classList.add('flash');
+        setTimeout(function () { row.classList.remove('flash'); }, 1200);
+      }
+    }
+  });
+
+  function renderAll() {
+    var total = comments.length;
+    var pagesTouched = {};
+    var byStatus = { high: 0, medium: 0, low: 0 };
+    var byCol = { US: 0, India: 0 };
+    comments.forEach(function (c) {
+      pagesTouched[c.pageId] = true;
+      byStatus[c.status] = (byStatus[c.status] || 0) + 1;
+      byCol[c.column] = (byCol[c.column] || 0) + 1;
+    });
+    var pagesTouchedCount = Object.keys(pagesTouched).length;
+
+    document.getElementById('m-total').textContent = total;
+    document.getElementById('m-pages').textContent = pagesTouchedCount + ' / ' + TOTAL_PAGES;
+    document.getElementById('m-high').textContent = byStatus.high;
+    document.getElementById('m-medium').textContent = byStatus.medium;
+    document.getElementById('m-low').textContent = byStatus.low;
+    document.getElementById('m-us').textContent = byCol.US;
+    document.getElementById('m-india').textContent = byCol.India;
+    document.getElementById('pm-total').textContent = total;
+    document.getElementById('pm-pages').textContent = pagesTouchedCount;
+    document.getElementById('pm-high').textContent = byStatus.high;
+    panelToggle.querySelector('.count').textContent = total;
+
+    document.querySelectorAll('.cmt-badge').forEach(function (b) {
+      var pid = b.getAttribute('data-page');
+      var count = comments.filter(function (c) { return c.pageId === pid; }).length;
+      b.textContent = count > 0 ? ('💬 ' + count) : '';
+      b.style.display = count > 0 ? 'inline-block' : 'none';
+    });
+    document.querySelectorAll('.chip-cmt').forEach(function (b) {
+      var pid = b.getAttribute('data-page-badge');
+      var count = comments.filter(function (c) { return c.pageId === pid; }).length;
+      b.textContent = count > 0 ? count : '';
+      b.style.display = count > 0 ? 'flex' : 'none';
+    });
+
+    if (total === 0) {
+      panelList.innerHTML = '<div class="cmt-empty">No comments yet. Select any text in a page (either column) and click &ldquo;+ Comment&rdquo; to leave a note or question.</div>';
+      return;
+    }
+    var grouped = {};
+    var order = [];
+    comments.forEach(function (c) {
+      if (!grouped[c.pageId]) { grouped[c.pageId] = []; order.push(c.pageId); }
+      grouped[c.pageId].push(c);
+    });
+    order.sort(function (a, b) {
+      var na = parseFloat(String(a).replace('page-', '')) || 0;
+      var nb = parseFloat(String(b).replace('page-', '')) || 0;
+      return na - nb;
+    });
+    var html = '';
+    order.forEach(function (pid) {
+      var list = grouped[pid];
+      html += '<div class="cmt-group"><div class="cmt-group-head" data-page="' + pid + '">Page ' + list[0].pageNum + ' — ' + escapeHtml(list[0].pageTitle) + '</div>';
+      list.forEach(function (c) {
+        html += '<div class="cmt-row" data-id="' + c.id + '">' +
+          '<div class="cmt-quote">“' + escapeHtml(c.quote) + '”<span class="cmt-col cmt-col-' + c.column + '">' + c.column + '</span></div>' +
+          '<div class="cmt-text">' + escapeHtml(c.text) + '</div>' +
+          '<button class="cmt-del" data-id="' + c.id + '" title="Delete">✕</button>' +
+          '</div>';
+      });
+      html += '</div>';
+    });
+    panelList.innerHTML = html;
+  }
+
+  function buildPrompt() {
+    if (comments.length === 0) return 'No comments have been added yet — select some text in the comparison doc first.';
+    var out = '# Change Requests — IK India FDE Brochure Comparison\n\n';
+    var uniquePages = {};
+    comments.forEach(function (c) { uniquePages[c.pageId] = true; });
+    out += 'I reviewed the US-vs-India brochure comparison and have ' + comments.length + ' change request(s) across ' + Object.keys(uniquePages).length + ' page(s). Please update the India brochure (and the comparison doc) to address each of these.\n\n';
+    var grouped = {};
+    var order = [];
+    comments.forEach(function (c) {
+      if (!grouped[c.pageId]) { grouped[c.pageId] = []; order.push(c.pageId); }
+      grouped[c.pageId].push(c);
+    });
+    order.sort(function (a, b) {
+      var na = parseFloat(String(a).replace('page-', '')) || 0;
+      var nb = parseFloat(String(b).replace('page-', '')) || 0;
+      return na - nb;
+    });
+    order.forEach(function (pid) {
+      var list = grouped[pid];
+      out += '## Page ' + list[0].pageNum + ' — ' + list[0].pageTitle + '\n\n';
+      list.forEach(function (c) {
+        out += '- Selected text (' + c.column + ' column): "' + c.quote + '"\n';
+        out += '  Request: ' + c.text + '\n\n';
+      });
+    });
+    return out;
+  }
+
+  function downloadText(text, filename) {
+    var blob = new Blob([text], { type: 'text/plain' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(a.href);
+  }
+
+  document.getElementById('btn-copy-prompt').addEventListener('click', function () {
+    var text = buildPrompt();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () {
+        showToast('Prompt copied — paste it to Claude in your next message');
+      }).catch(function () { downloadText(text, 'IK_Brochure_Comments_Prompt.md'); });
+    } else {
+      downloadText(text, 'IK_Brochure_Comments_Prompt.md');
+    }
+  });
+
+  document.getElementById('btn-download-prompt').addEventListener('click', function () {
+    downloadText(buildPrompt(), 'IK_Brochure_Comments_Prompt.md');
+  });
+
+  document.getElementById('btn-save-backup').addEventListener('click', function () {
+    downloadText(JSON.stringify(comments, null, 2), 'IK_Brochure_Comments_Backup.json');
+  });
+
+  document.getElementById('btn-load-backup').addEventListener('click', function () {
+    document.getElementById('file-load-backup').click();
+  });
+
+  document.getElementById('file-load-backup').addEventListener('change', function (e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function () {
+      try {
+        var loaded = JSON.parse(reader.result);
+        if (Array.isArray(loaded)) {
+          comments = loaded;
+          var maxId = 0;
+          comments.forEach(function (c) { if (c.id > maxId) maxId = c.id; });
+          nextId = maxId + 1;
+          renderAll();
+          showToast('Backup loaded (' + loaded.length + ' comments) — note: highlights only show for comments made this session');
+        }
+      } catch (err) { showToast('Could not read that file'); }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  });
+
+  panelToggle.addEventListener('click', function () { panel.classList.toggle('open'); });
+  document.getElementById('panel-close').addEventListener('click', function () { panel.classList.remove('open'); });
+
+  renderAll();
+})();
+</script>
 </body>
 </html>
