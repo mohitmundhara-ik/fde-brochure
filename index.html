@@ -227,9 +227,22 @@
     opacity: 0; pointer-events: none; transition: all 0.25s; z-index: 300;
   }
   #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ---- setup banner (shown if Supabase isn't configured yet) ---- */
+  #setup-banner {
+    display: none; background: #FEF2F2; border-bottom: 3px solid #B3261E; color: #7A1712;
+    padding: 12px 24px; font-size: 13px; line-height: 1.5;
+  }
+  #setup-banner b { color: #B3261E; }
+  #setup-banner code { background: rgba(179,38,30,0.1); padding: 1px 5px; border-radius: 3px; }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+<div id="setup-banner">
+  <b>Comments aren't connected to a database yet.</b> Add your Supabase project URL and anon key at the top of the
+  <code>&lt;script&gt;</code> block below (look for <code>SUPABASE_URL</code> / <code>SUPABASE_ANON_KEY</code>) and redeploy. Until then, comments won't save or sync.
+</div>
 <header class="top">
   <h1>IK Forward Deployed AI Engineering Brochure &mdash; US Original vs. India Final</h1>
   <div class="sub">Page-by-page comparison &middot; 22 pages &middot; select any text below to leave a comment or question</div>
@@ -311,7 +324,7 @@
       </div>
       <div class="col col-india">
         <div class="col-label">India Brochure &middot; Final</div>
-        <div class="col-body"><p><b>Companies in India Are Already Paying for This Skill</b></p><p>Forward Deployed AI Engineering isn't a future category in India &mdash; it's already being hired for, funded, and paid at a premium, right now.</p><div class="stat-row"><div class="stat"><div class="stat-big">Up to ₹1 Cr</div><div class="stat-label">Advertised ceiling on a live Hyderabad FDE posting (3–10 YOE), Jul 2026</div></div><div class="stat"><div class="stat-big">~800%</div><div class="stat-label">Growth in India FDE job postings, Q1–Q3 2025 (TeamLease Digital)</div></div><div class="stat"><div class="stat-big">250+</div><div class="stat-label">Genuine FDE roles open across India at any time, and growing</div></div></div><h4>Real Roles, Real Money</h4><p>A live recruiter posting in Hyderabad currently advertises a Forward Deployed Engineer (Agentic) role at up to ₹1 crore for 3–10 years of experience. Cartesia, a US voice-AI company building out its India FDE team, publicly lists its India roles at ₹70–90 lakh per year. Even the market average sits well above typical SDE bands: ₹13.1 LPA overall (Glassdoor), climbing to roughly ₹40 LPA for experienced FDEs &mdash; who earn about 24% more than customer support engineers and 16% more than technical account managers in comparable roles (TeamLease Digital).</p><h4>Hard Dollars Behind the Role</h4><p>Sarvam AI's $234M Series B (June 2026) explicitly earmarks capital to “expand its forward-deployed motion across key verticals.” TCS has committed to building up to 8,900 AI-deployment engineers, calling it a talent play, not cost arbitrage. Coforge is scaling its FDE team 5x &mdash; from 20 to 100 &mdash; calling the skill set “the cherry on the cake... that's going to be gold.” EPAM India is doubling its FDE team from 50 to 100.</p><h4>A Skills Gap, Not a Saturated Market</h4><p>NASSCOM projects India's AI talent pool growing from roughly 650,000 today to 1.25M+ by 2027 &mdash; with the demand-supply gap already near 53%. India also leads the world in AI skill penetration, at close to 3x the global average (Stanford AI Index 2026).</p><h4>A Comprehensive Program, Built for Depth</h4><p>Several FDE-related courses already exist in India. What sets this program apart is combining AI engineering depth, enterprise deployment, and dedicated career support in one end-to-end track.</p><p class="note">Source: TeamLease Digital (India FDE job-market growth and roles); Sarvam AI Series B announcement, Jun 2026; TCS (Reuters, Jul 2026); Coforge &amp; EPAM India (Business Standard, Jun 2026); Glassdoor India; NASSCOM&ndash;Deloitte AI Skills report; Stanford AI Index 2026. Compensation figures shown are as advertised or employer-stated; ceilings are not guaranteed offers.</p><div class="flag">⚑ Reworked again per feedback: the honest-but-modest version undersold the opportunity, so this pass adds real, verified proof points that create the same narrative pull as the US brochure's Explosive Demand / Unmatched Pay / Hard Dollars sections — a live ₹1 Cr Hyderabad posting (corroborated via the recruiter's LinkedIn, since the direct apply link blocks scraping and doesn't name the end employer), Sarvam's Series B language, and named FDE headcount targets from TCS/Coforge/EPAM. Still zero US-vs-India comparison, and “up to ₹1 Cr” is explicitly flagged as an advertised ceiling, not a guaranteed offer.</div></div>
+        <div class="col-body"><p><b>Companies in India Are Already Paying for This Skill</b></p><p>Forward Deployed AI Engineering isn't a future category in India &mdash; it's already being hired for, funded, and paid at a premium, right now.</p><div class="stat-row"><div class="stat"><div class="stat-big">Up to ₹1 Cr</div><div class="stat-label">Advertised ceiling on a live Hyderabad FDE posting (3–10 YOE), Jul 2026</div></div><div class="stat"><div class="stat-big">~800%</div><div class="stat-label">Growth in India FDE job postings, Q1–Q3 2025 (TeamLease Digital)</div></div><div class="stat"><div class="stat-big">250+</div><div class="stat-label">Genuine FDE roles open across India at any time, and growing</div></div></div><h4>Real Roles, Real Money</h4><p>A live Hyderabad posting advertises a Forward Deployed Engineer (Agentic) role at up to ₹1 crore for 3–10 years' experience. Cartesia posts its India FDE roles at ₹70–90 lakh per year &mdash; well above the ₹13.1 LPA India market average (Glassdoor).</p><h4>Hard Dollars Behind the Role</h4><p>Sarvam AI's $234M Series B (June 2026) is earmarked to expand its forward-deployed engineering team. TCS is building up to 8,900 AI-deployment engineers; Coforge is scaling its FDE team 5x, and EPAM India is doubling its.</p><h4>A Skills Gap, Not a Saturated Market</h4><p>NASSCOM projects India's AI talent gap reaching ~53% by 2027, even as the talent pool grows to 1.25M+. India already leads the world in AI skill penetration, at ~3x the global average (Stanford AI Index 2026).</p><h4>A Comprehensive Program, Built for Depth</h4><p>Several FDE-related courses already exist in India. What sets this program apart is combining AI engineering depth, enterprise deployment, and dedicated career support in one end-to-end track.</p><p class="note">Source: TeamLease Digital; Sarvam AI (Jun 2026); TCS (Reuters, Jul 2026); Coforge &amp; EPAM India (Business Standard); Glassdoor India; NASSCOM&ndash;Deloitte; Stanford AI Index 2026. Figures are advertised or employer-stated; ceilings are not guaranteed offers.</p><div class="flag">⚑ Trimmed per feedback — the previous pass had the right facts but stacked too many clauses and quotes per section, reading dense next to the US column's terse one-liners. Same verified numbers, cut to match the US column's sentence length and rhythm.</div></div>
       </div>
     </div>
   </section>
@@ -655,23 +668,30 @@
   <div class="panel-actions">
     <button class="primary" id="btn-copy-prompt">📋 Copy Prompt for Claude</button>
     <button id="btn-download-prompt">Download Prompt (.md)</button>
-    <button id="btn-save-backup">Save Backup (.json)</button>
-    <button id="btn-load-backup">Load Backup (.json)</button>
+    <button id="btn-save-backup">Export All (.json)</button>
   </div>
 </div>
-<input type="file" id="file-load-backup" accept="application/json" style="display:none">
 <div id="toast"></div>
 
 <script>
 (function () {
+  // ============================================================
+  // CONFIG — fill these in with your own Supabase project, then redeploy.
+  // Project Settings → API → "Project URL" and "anon public" key.
+  // Both are safe to expose in client-side code; access is controlled by
+  // the Row Level Security policies you run from supabase_schema.sql.
+  // ============================================================
+  var SUPABASE_URL = 'https://nalyeofonirmbkvblpyh.supabase.co/rest/v1/';
+  var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5hbHllb2ZvbmlybWJrdmJscHloIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ1MDY4MTMsImV4cCI6MjEwMDA4MjgxM30.MWZWgYP1HjXG_WPKiqZiMpgTGlbnuq2r4Nc8Yzi0SgU';
+  var CONFIGURED = SUPABASE_URL.indexOf('YOUR_SUPABASE') === -1 && SUPABASE_ANON_KEY.indexOf('YOUR_SUPABASE') === -1;
+
   var PAGES_META = {"page-1":{"num":"1","title":"Cover","status":"high"},"page-2":{"num":"2","title":"Move Beyond Demos. Ship Production Systems.","status":"low"},"page-3":{"num":"3","title":"Market Opportunity","status":"high"},"page-4":{"num":"4","title":"Who This Program Is For","status":"medium"},"page-5":{"num":"5","title":"Program at a Glance","status":"low"},"page-6":{"num":"6","title":"What Makes This Program Unique","status":"high"},"page-7":{"num":"7","title":"Tech Stack Covered Across the Program","status":"medium"},"page-8":{"num":"8","title":"Program Roadmap","status":"low"},"page-9–13":{"num":"9–13","title":"Curriculum · Week by Week (FDE Spine, Weeks 13–17)","status":"high"},"page-14":{"num":"14","title":"Live Guided Projects","status":"low"},"page-15":{"num":"15","title":"Capstone Projects","status":"high"},"page-16":{"num":"16","title":"Career & Bonus Tracks","status":"low"},"page-17":{"num":"17","title":"Your Instructors and Mentors","status":"high"},"page-18":{"num":"18","title":"About Interview Kickstart","status":"medium"},"page-19":{"num":"19","title":"Alumni Benefits","status":"low"},"page-20":{"num":"20","title":"Enrollment Process","status":"low"},"page-21":{"num":"21","title":"Certificate of Completion","status":"low"},"page-22":{"num":"22","title":"Closing / Thank You","status":"low"}};
   var comments = [];
-  var nextId = 1;
   var pendingRange = null;
   var openReplyId = null;
   var TOTAL_PAGES = 18;
-  var STORAGE_KEY = 'ik-brochure-comments';
-  var hasStorage = (typeof window.storage !== 'undefined' && window.storage !== null);
+  var sb = null;
+  var connectionState = 'connecting'; // connecting | live | offline | unconfigured
 
   var selectBtn = document.getElementById('add-comment-btn');
   var popup = document.getElementById('comment-popup');
@@ -692,13 +712,30 @@
   function updateSyncBadge() {
     var el = document.getElementById('sync-badge');
     if (!el) return;
-    if (hasStorage) {
-      el.textContent = '🟢 Synced';
-      el.title = 'Comments save automatically and are shared with anyone who opens this.';
-    } else {
-      el.textContent = '💾 Local only';
-      el.title = 'Storage isn\'t available in this view (e.g. opened as a standalone file). Use Save/Load Backup to keep your comments.';
-    }
+    var map = {
+      connecting: ['🟡 Connecting…', 'Connecting to the comments database.'],
+      live: ['🟢 Live', 'Comments save automatically and sync in real time for anyone viewing this.'],
+      offline: ['🔴 Offline', 'Lost connection to the comments database — retrying. Your last action may not have saved.'],
+      unconfigured: ['⚠️ Not connected', 'No database configured yet — see the banner above.'],
+    };
+    var m = map[connectionState] || map.connecting;
+    el.textContent = m[0];
+    el.title = m[1];
+  }
+
+  // ---- DB <-> JS field mapping ----
+  function fromDb(row) {
+    return {
+      id: row.id, pageId: row.page_id, pageNum: row.page_num, pageTitle: row.page_title,
+      status: row.status, column: row.col, quote: row.quote, text: row.comment_text,
+      resolved: !!row.resolved, reply: row.reply || '',
+    };
+  }
+  function toDb(c) {
+    return {
+      page_id: c.pageId, page_num: c.pageNum, page_title: c.pageTitle, status: c.status,
+      col: c.column, quote: c.quote, comment_text: c.text, resolved: c.resolved, reply: c.reply || '',
+    };
   }
 
   function hideSelectBtn() { selectBtn.style.display = 'none'; }
@@ -727,6 +764,7 @@
   });
 
   selectBtn.addEventListener('click', function () {
+    if (!CONFIGURED) { showToast('Comments database isn\'t configured yet — see the banner at the top of the page.'); hideSelectBtn(); return; }
     var rect = selectBtn.getBoundingClientRect();
     popup.style.top = (window.scrollY + rect.bottom + 6) + 'px';
     popup.style.left = (window.scrollX + rect.left) + 'px';
@@ -770,7 +808,7 @@
     span.setAttribute('data-id', comment.id);
     var marker = document.createElement('sup');
     marker.className = 'comment-marker';
-    marker.textContent = comment.id;
+    marker.textContent = '•';
     marker.setAttribute('data-id', comment.id);
     marker.title = comment.text;
     return { span: span, marker: marker };
@@ -796,8 +834,8 @@
   }
 
   // Re-find a comment's quoted text in the live DOM and re-wrap it with a highlight.
-  // Needed because highlights themselves aren't stored — only page/column/quote text is —
-  // so every load (or sync from another session) has to re-anchor them.
+  // Needed because only page/column/quote text is stored — not a DOM range —
+  // so every load (or incoming realtime event) has to re-anchor visually.
   function reanchor(comment) {
     if (document.querySelector('.commented[data-id="' + comment.id + '"]')) return;
     var colClass = comment.column === 'US' ? 'col-us' : 'col-india';
@@ -830,39 +868,18 @@
       wrapRange(range, built.span);
       built.span.appendChild(built.marker);
       updateMarkerStyle(comment);
-    } catch (e) { /* text moved/changed since the comment was made — skip highlight, still shown in panel */ }
+    } catch (e) { /* text changed since the comment was made — skip highlight, still shown in panel */ }
   }
 
-  async function fetchRemoteComments() {
-    if (!hasStorage) return comments;
-    try {
-      var res = await window.storage.get(STORAGE_KEY, true);
-      if (res && res.value) return JSON.parse(res.value);
-    } catch (e) { /* key doesn't exist yet */ }
-    return [];
-  }
-
-  async function persist() {
-    if (!hasStorage) return;
-    try {
-      await window.storage.set(STORAGE_KEY, JSON.stringify(comments), true);
-    } catch (e) {
-      showToast('Could not sync just now — your comment is still here locally');
-    }
-  }
-
-  function applyIncoming(fresh) {
-    var freshIds = {};
-    fresh.forEach(function (c) { freshIds[c.id] = true; });
-    comments.forEach(function (c) { if (!freshIds[c.id]) removeHighlight(c.id); });
-    comments = fresh;
-    var maxId = 0;
-    comments.forEach(function (c) { if (c.id > maxId) maxId = c.id; });
-    nextId = Math.max(nextId, maxId + 1);
-    comments.forEach(function (c) { reanchor(c); updateMarkerStyle(c); });
+  // ---- Supabase-backed persistence ----
+  async function loadAllComments() {
+    var { data, error } = await sb.from('comments').select('*').order('created_at', { ascending: true });
+    if (error) { console.error(error); return []; }
+    return data.map(fromDb);
   }
 
   async function saveComment(range, text) {
+    if (!CONFIGURED) { showToast('Comments database isn\'t configured yet.'); return; }
     var container = range.commonAncestorContainer;
     var el = container.nodeType === 3 ? container.parentElement : container;
     var pageEl = el.closest('.page');
@@ -871,60 +888,142 @@
     var pageId = pageEl ? pageEl.id : 'unknown';
     var meta = PAGES_META[pageId] || { num: '?', title: '', status: 'low' };
     var quote = range.toString();
-    var id = nextId++;
 
-    var comment = { id: id, pageId: pageId, pageNum: meta.num, pageTitle: meta.title, status: meta.status, column: column, quote: quote, text: text, resolved: false, reply: '' };
-    var built = buildHighlight(comment);
+    // Optimistic: show the highlight immediately with a temp id, then reconcile
+    // with the real row (and its real id) once the insert returns. The realtime
+    // INSERT event for this same row will also arrive (maybe before, maybe after
+    // this call resolves) — reconcileInsert() below is written to converge to a
+    // single entry either way, since ordering between a REST response and a
+    // realtime broadcast isn't guaranteed.
+    var tempId = 'temp-' + Date.now() + '-' + Math.random().toString(36).slice(2);
+    var optimistic = { id: tempId, pageId: pageId, pageNum: meta.num, pageTitle: meta.title, status: meta.status, column: column, quote: quote, text: text, resolved: false, reply: '' };
+    var built = buildHighlight(optimistic);
     wrapRange(range, built.span);
     built.span.appendChild(built.marker);
-
-    comments.push(comment);
+    comments.push(optimistic);
     renderAll();
-    await persist();
-    showToast(hasStorage ? 'Comment added — synced for anyone viewing this' : 'Comment added (this device only — use Save Backup to keep it)');
+
+    var row = toDb(optimistic);
+    var { data, error } = await sb.from('comments').insert([row]).select();
+    if (error) {
+      showToast('Could not save that comment — check your connection and try again.');
+      comments = comments.filter(function (c) { return c.id !== tempId; });
+      removeHighlight(tempId);
+      renderAll();
+      return;
+    }
+    reconcileInsert(tempId, fromDb(data[0]));
+    showToast('Comment added — synced for anyone viewing this');
+  }
+
+  function upsertLocal(c) {
+    var idx = comments.findIndex(function (x) { return x.id === c.id; });
+    if (idx === -1) comments.push(c); else comments[idx] = c;
+  }
+
+  // Finalizes our own optimistic (temp-id) entry once the insert is DB-confirmed —
+  // this is the ONLY place a temp entry ever gets its real id, so the realtime
+  // handler below simply defers to this rather than racing it (see comment there).
+  function reconcileInsert(tempId, real) {
+    var idx = comments.findIndex(function (c) { return c.id === tempId; });
+    if (idx !== -1) comments[idx] = real; else upsertLocal(real);
+    var span = document.querySelector('.commented[data-id="' + tempId + '"]');
+    if (span) {
+      span.setAttribute('data-id', real.id);
+      var mk = span.querySelector('.comment-marker');
+      if (mk) mk.setAttribute('data-id', real.id);
+    }
+    renderAll();
   }
 
   async function deleteComment(id) {
+    var { error } = await sb.from('comments').delete().eq('id', id);
+    if (error) { showToast('Could not delete — try again.'); return; }
     comments = comments.filter(function (c) { return c.id !== id; });
     removeHighlight(id);
     renderAll();
-    await persist();
   }
 
   async function toggleResolved(id) {
     var c = comments.filter(function (c) { return c.id === id; })[0];
     if (!c) return;
-    c.resolved = !c.resolved;
+    var next = !c.resolved;
+    var { error } = await sb.from('comments').update({ resolved: next }).eq('id', id);
+    if (error) { showToast('Could not update — try again.'); return; }
+    c.resolved = next;
     updateMarkerStyle(c);
     renderAll();
-    await persist();
   }
 
   async function saveReply(id, replyText) {
+    var { error } = await sb.from('comments').update({ reply: replyText }).eq('id', id);
+    if (error) { showToast('Could not save reply — try again.'); return; }
     var c = comments.filter(function (c) { return c.id === id; })[0];
-    if (!c) return;
-    c.reply = replyText;
+    if (c) c.reply = replyText;
     openReplyId = null;
     renderAll();
-    await persist();
+  }
+
+  // ---- Realtime: apply changes broadcast from Postgres ----
+  // For INSERT specifically: our own inserts are already handled optimistically by
+  // saveComment()/reconcileInsert() above, so if this event's content matches one of
+  // our still-pending temp entries, it's just the echo of our own write — skip it
+  // and let reconcileInsert() finish that transition on its own. Only content that
+  // doesn't match a pending temp entry (i.e. genuinely came from someone else) gets
+  // added here. This avoids a race between two independent code paths both trying
+  // to create the same DOM highlight.
+  function handleRealtimeInsert(row) {
+    var c = fromDb(row);
+    if (comments.some(function (x) { return x.id === c.id; })) return;
+    var isOwnPendingEcho = comments.some(function (x) {
+      return String(x.id).indexOf('temp-') === 0 && x.pageId === c.pageId && x.column === c.column && x.quote === c.quote && x.text === c.text;
+    });
+    if (isOwnPendingEcho) return;
+    comments.push(c);
+    reanchor(c);
+    renderAll();
+  }
+  function handleRealtimeUpdate(row) {
+    var c = fromDb(row);
+    var idx = comments.findIndex(function (x) { return x.id === c.id; });
+    if (idx === -1) { comments.push(c); reanchor(c); } else { comments[idx] = c; }
+    updateMarkerStyle(c);
+    renderAll();
+  }
+  function handleRealtimeDelete(oldRow) {
+    comments = comments.filter(function (x) { return x.id !== oldRow.id; });
+    removeHighlight(oldRow.id);
+    renderAll();
+  }
+
+  function subscribeRealtime() {
+    sb.channel('public:comments')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'comments' }, function (payload) { handleRealtimeInsert(payload.new); })
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'comments' }, function (payload) { handleRealtimeUpdate(payload.new); })
+      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'comments' }, function (payload) { handleRealtimeDelete(payload.old); })
+      .subscribe(function (status) {
+        if (status === 'SUBSCRIBED') { connectionState = 'live'; }
+        else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') { connectionState = 'offline'; }
+        updateSyncBadge();
+      });
   }
 
   panelList.addEventListener('click', function (e) {
     var delBtn = e.target.closest('.cmt-del');
-    if (delBtn) { deleteComment(Number(delBtn.getAttribute('data-id'))); return; }
+    if (delBtn) { deleteComment(delBtn.getAttribute('data-id')); return; }
 
     var resolveBtn = e.target.closest('.cmt-resolve');
-    if (resolveBtn) { toggleResolved(Number(resolveBtn.getAttribute('data-id'))); return; }
+    if (resolveBtn) { toggleResolved(resolveBtn.getAttribute('data-id')); return; }
 
     var replyToggle = e.target.closest('.cmt-reply-toggle');
-    if (replyToggle) { openReplyId = Number(replyToggle.getAttribute('data-id')); renderAll(); return; }
+    if (replyToggle) { openReplyId = replyToggle.getAttribute('data-id'); renderAll(); return; }
 
     var replyCancel = e.target.closest('.cmt-reply-cancel');
     if (replyCancel) { openReplyId = null; renderAll(); return; }
 
     var replySave = e.target.closest('.cmt-reply-save');
     if (replySave) {
-      var id = Number(replySave.getAttribute('data-id'));
+      var id = replySave.getAttribute('data-id');
       var ta = panelList.querySelector('.cmt-reply-input[data-id="' + id + '"]');
       saveReply(id, ta ? ta.value.trim() : '');
       return;
@@ -1094,61 +1193,32 @@
   });
 
   document.getElementById('btn-save-backup').addEventListener('click', function () {
-    downloadText(JSON.stringify(comments, null, 2), 'IK_Brochure_Comments_Backup.json');
+    downloadText(JSON.stringify(comments, null, 2), 'IK_Brochure_Comments_Export.json');
   });
 
-  document.getElementById('btn-load-backup').addEventListener('click', function () {
-    document.getElementById('file-load-backup').click();
-  });
-
-  document.getElementById('file-load-backup').addEventListener('change', function (e) {
-    var file = e.target.files[0];
-    if (!file) return;
-    var reader = new FileReader();
-    reader.onload = function () {
-      try {
-        var loaded = JSON.parse(reader.result);
-        if (Array.isArray(loaded)) {
-          applyIncoming(loaded);
-          renderAll();
-          persist();
-          showToast('Backup loaded (' + loaded.length + ' comments)' + (hasStorage ? ' and synced' : ''));
-        }
-      } catch (err) { showToast('Could not read that file'); }
-    };
-    reader.readAsText(file);
-    e.target.value = '';
-  });
-
-  panelToggle.addEventListener('click', async function () {
-    panel.classList.toggle('open');
-    if (panel.classList.contains('open') && hasStorage) {
-      applyIncoming(await fetchRemoteComments());
-      renderAll();
-    }
-  });
+  panelToggle.addEventListener('click', function () { panel.classList.toggle('open'); });
   document.getElementById('panel-close').addEventListener('click', function () { panel.classList.remove('open'); });
 
-  async function pollForUpdates() {
-    if (!hasStorage) return;
-    try {
-      var fresh = await fetchRemoteComments();
-      var sig = function (list) { return JSON.stringify(list.map(function (c) { return [c.id, c.resolved, c.reply, c.text]; })); };
-      if (sig(fresh) !== sig(comments)) {
-        applyIncoming(fresh);
-        renderAll();
-        showToast('Comments updated from another session');
-      }
-    } catch (e) { /* ignore transient errors */ }
-  }
-
   async function init() {
+    if (!CONFIGURED) {
+      connectionState = 'unconfigured';
+      updateSyncBadge();
+      document.getElementById('setup-banner').style.display = 'block';
+      renderAll();
+      return;
+    }
+    sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     updateSyncBadge();
-    if (hasStorage) {
-      try { applyIncoming(await fetchRemoteComments()); } catch (e) { /* nothing saved yet */ }
-      setInterval(pollForUpdates, 20000);
+    try {
+      comments = await loadAllComments();
+    } catch (e) {
+      console.error(e);
+      connectionState = 'offline';
+      updateSyncBadge();
     }
     renderAll();
+    comments.forEach(function (c) { reanchor(c); });
+    subscribeRealtime();
   }
 
   init();
