@@ -676,12 +676,12 @@
 <script>
 (function () {
   // ============================================================
-  // CONFIG — fill these in with your own  project, then redeploy.
+  // CONFIG — fill these in with your own Supabase project, then redeploy.
   // Project Settings → API → "Project URL" and "anon public" key.
   // Both are safe to expose in client-side code; access is controlled by
   // the Row Level Security policies you run from supabase_schema.sql.
   // ============================================================
-  var SUPABASE_URL = 'https://nalyeofonirmbkvblpyh.supabase.co/';
+  var SUPABASE_URL = 'https://nalyeofonirmbkvblpyh.supabase.co';
   var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5hbHllb2ZvbmlybWJrdmJscHloIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ1MDY4MTMsImV4cCI6MjEwMDA4MjgxM30.MWZWgYP1HjXG_WPKiqZiMpgTGlbnuq2r4Nc8Yzi0SgU';
   var CONFIGURED = SUPABASE_URL.indexOf('YOUR_SUPABASE') === -1 && SUPABASE_ANON_KEY.indexOf('YOUR_SUPABASE') === -1;
 
@@ -937,8 +937,12 @@
   }
 
   async function deleteComment(id) {
-    var { error } = await sb.from('comments').delete().eq('id', id);
+    var { data, error } = await sb.from('comments').delete().eq('id', id).select();
     if (error) { showToast('Could not delete — try again.'); return; }
+    if (!data || data.length === 0) {
+      showToast('Delete didn\'t go through (database permissions) — see the setup guide.');
+      return;
+    }
     comments = comments.filter(function (c) { return c.id !== id; });
     removeHighlight(id);
     renderAll();
@@ -948,16 +952,22 @@
     var c = comments.filter(function (c) { return c.id === id; })[0];
     if (!c) return;
     var next = !c.resolved;
-    var { error } = await sb.from('comments').update({ resolved: next }).eq('id', id);
-    if (error) { showToast('Could not update — try again.'); return; }
+    var { data, error } = await sb.from('comments').update({ resolved: next }).eq('id', id).select();
+    if (error || !data || data.length === 0) {
+      showToast('Could not update (database permissions) — see the setup guide.');
+      return;
+    }
     c.resolved = next;
     updateMarkerStyle(c);
     renderAll();
   }
 
   async function saveReply(id, replyText) {
-    var { error } = await sb.from('comments').update({ reply: replyText }).eq('id', id);
-    if (error) { showToast('Could not save reply — try again.'); return; }
+    var { data, error } = await sb.from('comments').update({ reply: replyText }).eq('id', id).select();
+    if (error || !data || data.length === 0) {
+      showToast('Could not save reply (database permissions) — see the setup guide.');
+      return;
+    }
     var c = comments.filter(function (c) { return c.id === id; })[0];
     if (c) c.reply = replyText;
     openReplyId = null;
